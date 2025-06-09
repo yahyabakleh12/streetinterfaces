@@ -13,7 +13,7 @@ This repository contains a simple frontend built with **Vue 3** and **Vite**. It
    npm run dev
    ```
 
-The application expects a backend available at `http://localhost:8000/api`. If your API runs elsewhere, update the `baseURL` setting in [`src/services/cameraService.js`](src/services/cameraService.js).
+The application expects a backend available at `http://127.0.0.1:18006`. If your API runs elsewhere, update the `baseURL` setting in [`src/services/cameraService.js`](src/services/cameraService.js).
 
 ## Building for Production
 
