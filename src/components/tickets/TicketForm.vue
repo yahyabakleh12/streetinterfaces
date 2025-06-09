@@ -2,9 +2,12 @@
   <div>
     <h1>{{ isEdit ? 'Edit' : 'Create' }} Ticket</h1>
     <form @submit.prevent="submit">
-      <label>Plate: <input v-model="form.plate" /></label>
-      <label>Status: <input v-model="form.status" /></label>
-      <label>Amount: <input v-model="form.amount" type="number" /></label>
+      <label>Plate Number: <input v-model="form.plate_number" /></label>
+      <label>Plate Code: <input v-model="form.plate_code" /></label>
+      <label>Plate City: <input v-model="form.plate_city" /></label>
+      <label>Camera ID: <input v-model="form.camera_id" type="number" /></label>
+      <label>Entry Time: <input v-model="form.entry_time" /></label>
+      <label>Exit Time: <input v-model="form.exit_time" /></label>
       <button type="submit">Save</button>
     </form>
   </div>
@@ -21,9 +24,12 @@ const route  = useRoute()
 const props = defineProps({ isEdit: Boolean, id: Number })
 
 const form = reactive({
-  plate: '',
-  status: '',
-  amount: 0
+  plate_number: '',
+  plate_code: '',
+  plate_city: '',
+  camera_id: 1,
+  entry_time: '',
+  exit_time: ''
 })
 
 onMounted(async () => {

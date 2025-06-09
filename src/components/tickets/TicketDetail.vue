@@ -2,9 +2,10 @@
   <div v-if="ticket">
     <h1>Ticket #{{ ticket.id }}</h1>
     <ul>
-      <li>Plate: {{ ticket.plate }}</li>
-      <li>Status: {{ ticket.status }}</li>
-      <li>Amount: {{ ticket.amount }}</li>
+      <li>Plate Number: {{ ticket.plate_number }}</li>
+      <li>Plate Code: {{ ticket.plate_code }}</li>
+      <li>Entry Time: {{ ticket.entry_time }}</li>
+      <li>Exit Time: {{ ticket.exit_time }}</li>
     </ul>
     <router-link to="/tickets">Back to list</router-link>
   </div>
