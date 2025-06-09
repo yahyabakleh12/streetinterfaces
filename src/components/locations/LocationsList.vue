@@ -1,10 +1,8 @@
 <template>
   <div>
     <h1>Locations</h1>
-    <router-link to="/locations/create">
-      <button>Add New Location</button>
-    </router-link>
-    <table>
+    <router-link to="/locations/create" class="btn btn-primary mb-3">Add New Location</router-link>
+    <table class="table table-striped">
       <thead>
         <tr>
           <th>ID</th><th>Name</th><th>Code</th><th>Actions</th>
@@ -16,9 +14,9 @@
           <td>{{ loc.name }}</td>
           <td>{{ loc.code }}</td>
           <td>
-            <router-link :to="`/locations/${loc.id}`">View</router-link> |
-            <router-link :to="`/locations/${loc.id}/edit`">Edit</router-link> |
-            <a href="#" @click.prevent="deleteLocation(loc.id)">Delete</a>
+            <router-link :to="`/locations/${loc.id}`" class="btn btn-sm btn-secondary me-1">View</router-link>
+            <router-link :to="`/locations/${loc.id}/edit`" class="btn btn-sm btn-secondary me-1">Edit</router-link>
+            <button class="btn btn-sm btn-danger" @click.prevent="deleteLocation(loc.id)">Delete</button>
           </td>
         </tr>
       </tbody>

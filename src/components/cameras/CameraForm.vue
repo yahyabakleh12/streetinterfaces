@@ -2,12 +2,27 @@
   <div>
     <h1>{{ isEdit ? 'Edit' : 'Create' }} Camera</h1>
     <form @submit.prevent="submit">
-      <label>Pole ID: <input v-model="form.pole_id" type="number" /></label>
-      <label>API Code: <input v-model="form.api_code" /></label>
-      <label>IP:       <input v-model="form.p_ip" /></label>
-      <label># Spots: <input v-model="form.number_of_parking" type="number" /></label>
-      <label>VPN IP:  <input v-model="form.vpn_ip" /></label>
-      <button type="submit">Save</button>
+      <div class="mb-3">
+        <label class="form-label">Pole ID</label>
+        <input v-model="form.pole_id" type="number" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">API Code</label>
+        <input v-model="form.api_code" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">IP</label>
+        <input v-model="form.p_ip" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label"># Spots</label>
+        <input v-model="form.number_of_parking" type="number" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">VPN IP</label>
+        <input v-model="form.vpn_ip" class="form-control" />
+      </div>
+      <button type="submit" class="btn btn-primary">Save</button>
     </form>
   </div>
 </template>

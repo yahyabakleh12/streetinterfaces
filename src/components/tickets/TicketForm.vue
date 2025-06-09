@@ -2,13 +2,31 @@
   <div>
     <h1>{{ isEdit ? 'Edit' : 'Create' }} Ticket</h1>
     <form @submit.prevent="submit">
-      <label>Plate Number: <input v-model="form.plate_number" /></label>
-      <label>Plate Code: <input v-model="form.plate_code" /></label>
-      <label>Plate City: <input v-model="form.plate_city" /></label>
-      <label>Camera ID: <input v-model="form.camera_id" type="number" /></label>
-      <label>Entry Time: <input v-model="form.entry_time" /></label>
-      <label>Exit Time: <input v-model="form.exit_time" /></label>
-      <button type="submit">Save</button>
+      <div class="mb-3">
+        <label class="form-label">Plate Number</label>
+        <input v-model="form.plate_number" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Plate Code</label>
+        <input v-model="form.plate_code" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Plate City</label>
+        <input v-model="form.plate_city" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Camera ID</label>
+        <input v-model="form.camera_id" type="number" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Entry Time</label>
+        <input v-model="form.entry_time" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Exit Time</label>
+        <input v-model="form.exit_time" class="form-control" />
+      </div>
+      <button type="submit" class="btn btn-primary">Save</button>
     </form>
   </div>
 </template>

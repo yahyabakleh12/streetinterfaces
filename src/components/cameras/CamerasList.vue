@@ -1,10 +1,8 @@
 <template>
   <div>
     <h1>Cameras</h1>
-    <router-link to="/cameras/create">
-      <button>Add New Camera</button>
-    </router-link>
-    <table>
+    <router-link to="/cameras/create" class="btn btn-primary mb-3">Add New Camera</router-link>
+    <table class="table table-striped">
       <thead>
         <tr>
           <th>ID</th><th>Pole ID</th><th>API Code</th><th>IP</th><th># Spots</th><th>VPN IP</th><th>Actions</th>
@@ -19,9 +17,9 @@
           <td>{{ cam.number_of_parking }}</td>
           <td>{{ cam.vpn_ip || '–' }}</td>
           <td>
-            <router-link :to="`/cameras/${cam.id}`">View</router-link> |
-            <router-link :to="`/cameras/${cam.id}/edit`">Edit</router-link> |
-            <a href="#" @click.prevent="deleteCamera(cam.id)">Delete</a>
+            <router-link :to="`/cameras/${cam.id}`" class="btn btn-sm btn-secondary me-1">View</router-link>
+            <router-link :to="`/cameras/${cam.id}/edit`" class="btn btn-sm btn-secondary me-1">Edit</router-link>
+            <button class="btn btn-sm btn-danger" @click.prevent="deleteCamera(cam.id)">Delete</button>
           </td>
         </tr>
       </tbody>
