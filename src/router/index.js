@@ -19,9 +19,6 @@ import TicketsList from '@/components/tickets/TicketsList.vue'
 import TicketForm   from '@/components/tickets/TicketForm.vue'
 import TicketDetail from '@/components/tickets/TicketDetail.vue'
 
-import ManualReviewsList from '@/components/manualReviews/ManualReviewsList.vue'
-import ManualReviewDetail from '@/components/manualReviews/ManualReviewDetail.vue'
-import ManualTransactionsList from '@/components/manualTransactions/ManualTransactionsList.vue'
 
 const routes = [
   { path: '/', redirect: '/cameras' },
@@ -49,9 +46,6 @@ const routes = [
   { path: '/tickets/:id/edit', component: TicketForm,   props: route => ({ isEdit: true, id: +route.params.id }) },
   { path: '/tickets/:id',      component: TicketDetail, props: true },
 
-  { path: '/manual-reviews', component: ManualReviewsList },
-  { path: '/manual-reviews/:id', component: ManualReviewDetail, props: true },
-  { path: '/manual-transactions', component: ManualTransactionsList },
 ]
 
 export default createRouter({
