@@ -1,5 +1,29 @@
-# Vue 3 + Vite
+# Parking Management UI
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+This repository contains a simple frontend built with **Vue 3** and **Vite**. It provides a basic interface for managing parking cameras and demonstrates CRUD operations against a REST API.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## Getting Started
+
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+The application expects a backend available at `http://localhost:8000/api`. If your API runs elsewhere, update the `baseURL` setting in [`src/services/cameraService.js`](src/services/cameraService.js).
+
+## Building for Production
+
+Generate optimized assets in the `dist` directory with:
+```bash
+npm run build
+```
+You can preview the production build locally using:
+```bash
+npm run preview
+```
+
+For more information on working with Vue, see the [Vue 3 documentation](https://vuejs.org/).
