@@ -2,6 +2,11 @@
   <div>
     <h1>Tickets</h1>
     <router-link to="/tickets/create" class="btn btn-primary mb-3">Add New Ticket</router-link>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <input v-model="search" @keyup.enter="fetchTickets" type="text" placeholder="Search" class="form-control" />
+      </div>
+    </div>
     <table class="table table-striped">
       <thead>
         <tr>
@@ -28,26 +33,59 @@
         </tr>
       </tbody>
     </table>
+    <nav>
+      <ul class="pagination">
+        <li class="page-item" :class="{ disabled: page === 1 }">
+          <button class="page-link" @click="prevPage">Previous</button>
+        </li>
+        <li class="page-item" :class="{ disabled: page * pageSize >= total }">
+          <button class="page-link" @click="nextPage">Next</button>
+        </li>
+      </ul>
+    </nav>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import ticketService from '@/services/ticketService'
 
 const tickets = ref([])
+const page = ref(1)
+const pageSize = ref(50)
+const search = ref('')
+const total = ref(0)
 
-async function load() {
-  const { data } = await ticketService.getAll()
-  tickets.value = data
+async function fetchTickets() {
+  const { data } = await ticketService.getAll({
+    page: page.value,
+    page_size: pageSize.value,
+    search: search.value || undefined,
+  })
+  tickets.value = data.items ?? data
+  total.value = data.total ?? tickets.value.length
+}
+
+function nextPage() {
+  if (page.value * pageSize.value < total.value) page.value++
+}
+
+function prevPage() {
+  if (page.value > 1) page.value--
 }
 
 async function deleteTicket(id) {
   if (confirm('Are you sure?')) {
     await ticketService.remove(id)
-    load()
+    fetchTickets()
   }
 }
 
-onMounted(load)
+watch([page, pageSize], fetchTickets)
+watch(search, () => {
+  page.value = 1
+  fetchTickets()
+})
+
+onMounted(fetchTickets)
 </script>

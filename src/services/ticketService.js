@@ -6,7 +6,7 @@ const API = axios.create({
 })
 
 export default {
-  getAll()            { return API.get('/tickets') },
+  getAll(params = {}) { return API.get('/tickets', { params }) },
   get(id)             { return API.get(`/tickets/${id}`) },
   create(payload)     { return API.post('/tickets', payload) },
   update(id, payload) { return API.put(`/tickets/${id}`, payload) },
