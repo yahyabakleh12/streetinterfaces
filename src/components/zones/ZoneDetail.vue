@@ -1,11 +1,11 @@
 <template>
   <div v-if="zone">
     <h1>Zone #{{ zone.id }}</h1>
-    <ul>
-      <li>Code: {{ zone.code }}</li>
-      <li>Location ID: {{ zone.location_id }}</li>
+    <ul class="list-group mb-3">
+      <li class="list-group-item">Code: {{ zone.code }}</li>
+      <li class="list-group-item">Location ID: {{ zone.location_id }}</li>
     </ul>
-    <router-link to="/zones">Back to list</router-link>
+    <router-link to="/zones" class="btn btn-secondary">Back to list</router-link>
   </div>
 </template>
 

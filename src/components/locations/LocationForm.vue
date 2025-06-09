@@ -2,12 +2,27 @@
   <div>
     <h1>{{ isEdit ? 'Edit' : 'Create' }} Location</h1>
     <form @submit.prevent="submit">
-      <label>Name: <input v-model="form.name" /></label>
-      <label>Code: <input v-model="form.code" /></label>
-      <label>Portal Name: <input v-model="form.portal_name" /></label>
-      <label>Portal Password: <input v-model="form.portal_password" /></label>
-      <label>IP Schema: <input v-model="form.ip_schema" /></label>
-      <button type="submit">Save</button>
+      <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input v-model="form.name" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Code</label>
+        <input v-model="form.code" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Portal Name</label>
+        <input v-model="form.portal_name" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Portal Password</label>
+        <input v-model="form.portal_password" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">IP Schema</label>
+        <input v-model="form.ip_schema" class="form-control" />
+      </div>
+      <button type="submit" class="btn btn-primary">Save</button>
     </form>
   </div>
 </template>

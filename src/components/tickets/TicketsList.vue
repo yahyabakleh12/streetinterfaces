@@ -1,10 +1,8 @@
 <template>
   <div>
     <h1>Tickets</h1>
-    <router-link to="/tickets/create">
-      <button>Add New Ticket</button>
-    </router-link>
-    <table>
+    <router-link to="/tickets/create" class="btn btn-primary mb-3">Add New Ticket</router-link>
+    <table class="table table-striped">
       <thead>
         <tr>
           <th>ID</th>
@@ -23,9 +21,9 @@
           <td>{{ ticket.entry_time }}</td>
           <td>{{ ticket.exit_time }}</td>
           <td>
-            <router-link :to="`/tickets/${ticket.id}`">View</router-link> |
-            <router-link :to="`/tickets/${ticket.id}/edit`">Edit</router-link> |
-            <a href="#" @click.prevent="deleteTicket(ticket.id)">Delete</a>
+            <router-link :to="`/tickets/${ticket.id}`" class="btn btn-sm btn-secondary me-1">View</router-link>
+            <router-link :to="`/tickets/${ticket.id}/edit`" class="btn btn-sm btn-secondary me-1">Edit</router-link>
+            <button class="btn btn-sm btn-danger" @click.prevent="deleteTicket(ticket.id)">Delete</button>
           </td>
         </tr>
       </tbody>

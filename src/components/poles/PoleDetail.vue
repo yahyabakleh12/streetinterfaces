@@ -1,13 +1,13 @@
 <template>
   <div v-if="pole">
     <h1>Pole #{{ pole.id }}</h1>
-    <ul>
-      <li>Code: {{ pole.code }}</li>
-      <li>Zone ID: {{ pole.zone_id }}</li>
-      <li>Location ID: {{ pole.location_id }}</li>
-      <li># Cameras: {{ pole.number_of_cameras }}</li>
+    <ul class="list-group mb-3">
+      <li class="list-group-item">Code: {{ pole.code }}</li>
+      <li class="list-group-item">Zone ID: {{ pole.zone_id }}</li>
+      <li class="list-group-item">Location ID: {{ pole.location_id }}</li>
+      <li class="list-group-item"># Cameras: {{ pole.number_of_cameras }}</li>
     </ul>
-    <router-link to="/poles">Back to list</router-link>
+    <router-link to="/poles" class="btn btn-secondary">Back to list</router-link>
   </div>
 </template>
 

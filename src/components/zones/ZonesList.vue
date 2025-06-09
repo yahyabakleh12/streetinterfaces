@@ -1,10 +1,8 @@
 <template>
   <div>
     <h1>Zones</h1>
-    <router-link to="/zones/create">
-      <button>Add New Zone</button>
-    </router-link>
-    <table>
+    <router-link to="/zones/create" class="btn btn-primary mb-3">Add New Zone</router-link>
+    <table class="table table-striped">
       <thead>
         <tr>
           <th>ID</th><th>Code</th><th>Location</th><th>Actions</th>
@@ -16,9 +14,9 @@
           <td>{{ zone.code }}</td>
           <td>{{ zone.location_id }}</td>
           <td>
-            <router-link :to="`/zones/${zone.id}`">View</router-link> |
-            <router-link :to="`/zones/${zone.id}/edit`">Edit</router-link> |
-            <a href="#" @click.prevent="deleteZone(zone.id)">Delete</a>
+            <router-link :to="`/zones/${zone.id}`" class="btn btn-sm btn-secondary me-1">View</router-link>
+            <router-link :to="`/zones/${zone.id}/edit`" class="btn btn-sm btn-secondary me-1">Edit</router-link>
+            <button class="btn btn-sm btn-danger" @click.prevent="deleteZone(zone.id)">Delete</button>
           </td>
         </tr>
       </tbody>

@@ -1,14 +1,14 @@
 <template>
   <div v-if="camera">
     <h1>Camera #{{ camera.id }}</h1>
-    <ul>
-      <li>Pole ID: {{ camera.pole_id }}</li>
-      <li>API Code: {{ camera.api_code }}</li>
-      <li>IP: {{ camera.p_ip }}</li>
-      <li># Spots: {{ camera.number_of_parking }}</li>
-      <li>VPN IP: {{ camera.vpn_ip || '–' }}</li>
+    <ul class="list-group mb-3">
+      <li class="list-group-item">Pole ID: {{ camera.pole_id }}</li>
+      <li class="list-group-item">API Code: {{ camera.api_code }}</li>
+      <li class="list-group-item">IP: {{ camera.p_ip }}</li>
+      <li class="list-group-item"># Spots: {{ camera.number_of_parking }}</li>
+      <li class="list-group-item">VPN IP: {{ camera.vpn_ip || '–' }}</li>
     </ul>
-    <router-link to="/cameras">Back to list</router-link>
+    <router-link to="/cameras" class="btn btn-secondary">Back to list</router-link>
   </div>
 </template>
 

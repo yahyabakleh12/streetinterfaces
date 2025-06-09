@@ -2,9 +2,15 @@
   <div>
     <h1>{{ isEdit ? 'Edit' : 'Create' }} Zone</h1>
     <form @submit.prevent="submit">
-      <label>Code: <input v-model="form.code" /></label>
-      <label>Location ID: <input v-model="form.location_id" type="number" /></label>
-      <button type="submit">Save</button>
+      <div class="mb-3">
+        <label class="form-label">Code</label>
+        <input v-model="form.code" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Location ID</label>
+        <input v-model="form.location_id" type="number" class="form-control" />
+      </div>
+      <button type="submit" class="btn btn-primary">Save</button>
     </form>
   </div>
 </template>
