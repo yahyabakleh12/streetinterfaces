@@ -15,7 +15,9 @@
       <thead>
         <tr>
           <th>ID</th>
-          <th>Plate</th>
+          <th>Camera ID</th>
+          <th>spot_number</th>
+          <th>event_time</th>
           <th>Status</th>
           <th>Actions</th>
         </tr>
@@ -23,10 +25,11 @@
       <tbody>
         <tr v-for="rev in reviews" :key="rev.id">
           <td>{{ rev.id }}</td>
-          <!-- Plate may be returned under different property names. -->
-          <td>{{ rev.plate_number || rev.plate || rev.plate_status }}</td>
+          <td>{{ rev.camera_id }}</td>
+          <td>{{ rev.spot_number }}</td>
+          <td>{{ rev.event_time }}</td>
           <!-- Support `review_status` for backward compatibility. -->
-          <td>{{ rev.status || rev.review_status }}</td>
+          <td>{{ rev.plate_status || rev.review_status }}</td>
           <td>
             <router-link :to="`/manual-reviews/${rev.id}`" class="btn btn-sm btn-secondary">View</router-link>
           </td>
