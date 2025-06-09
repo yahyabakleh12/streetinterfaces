@@ -8,12 +8,17 @@ This repository contains a simple frontend built with **Vue 3** and **Vite**. It
    ```bash
    npm install
    ```
-2. Start the development server:
+2. Copy the `.env` file and adjust it if your backend runs on a different host:
+   ```bash
+   cp .env .env.local
+   # edit .env.local to change VITE_API_BASE_URL if needed
+   ```
+3. Start the development server:
    ```bash
    npm run dev
    ```
 
-The application expects a backend available at `http://127.0.0.1:18006`. If your API runs elsewhere, update the `baseURL` setting in the service files under [`src/services`](src/services).
+The application reads `VITE_API_BASE_URL` from the environment to locate the backend API. The default value in `.env` points to `http://127.0.0.1:18006`.
 
 ## Building for Production
 
