@@ -9,6 +9,7 @@
         <router-link class="nav-link" to="/zones">Zones</router-link>
         <router-link class="nav-link" to="/poles">Poles</router-link>
         <router-link class="nav-link" to="/tickets">Tickets</router-link>
+        <router-link class="nav-link" to="/manual-reviews">Manual Reviews</router-link>
       </div>
     </div>
   </nav>
