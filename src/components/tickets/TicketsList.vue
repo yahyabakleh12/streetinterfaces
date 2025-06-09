@@ -7,15 +7,21 @@
     <table>
       <thead>
         <tr>
-          <th>ID</th><th>Plate</th><th>Status</th><th>Amount</th><th>Actions</th>
+          <th>ID</th>
+          <th>Plate Number</th>
+          <th>Plate Code</th>
+          <th>Entry Time</th>
+          <th>Exit Time</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="ticket in tickets" :key="ticket.id">
           <td>{{ ticket.id }}</td>
-          <td>{{ ticket.plate }}</td>
-          <td>{{ ticket.status }}</td>
-          <td>{{ ticket.amount }}</td>
+          <td>{{ ticket.plate_number }}</td>
+          <td>{{ ticket.plate_code }}</td>
+          <td>{{ ticket.entry_time }}</td>
+          <td>{{ ticket.exit_time }}</td>
           <td>
             <router-link :to="`/tickets/${ticket.id}`">View</router-link> |
             <router-link :to="`/tickets/${ticket.id}/edit`">Edit</router-link> |
