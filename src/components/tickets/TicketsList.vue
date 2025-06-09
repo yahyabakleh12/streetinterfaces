@@ -13,6 +13,8 @@
           <th>ID</th>
           <th>Plate Number</th>
           <th>Plate Code</th>
+          <th>Camera ID</th>
+          <th>Spot Number</th>
           <th>Entry Time</th>
           <th>Exit Time</th>
           <th>Actions</th>
@@ -23,6 +25,8 @@
           <td>{{ ticket.id }}</td>
           <td>{{ ticket.plate_number }}</td>
           <td>{{ ticket.plate_code }}</td>
+          <td>{{ ticket.camera_id }}</td>
+          <td>{{ ticket.spot_number }}</td>
           <td>{{ ticket.entry_time }}</td>
           <td>{{ ticket.exit_time }}</td>
           <td>
