@@ -62,7 +62,9 @@ async function fetchTickets() {
     page_size: pageSize.value,
     search: search.value || undefined,
   })
-  tickets.value = data.items ?? data
+  // The API may return tickets under `data` or `items`.
+  // Normalize to always store just the array of tickets.
+  tickets.value = data.data ?? data.items ?? data
   total.value = data.total ?? tickets.value.length
 }
 
