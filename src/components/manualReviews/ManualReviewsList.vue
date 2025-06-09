@@ -23,8 +23,10 @@
       <tbody>
         <tr v-for="rev in reviews" :key="rev.id">
           <td>{{ rev.id }}</td>
-          <td>{{ rev.plate_number || rev.plate }}</td>
-          <td>{{ rev.status }}</td>
+          <!-- Plate may be returned under different property names. -->
+          <td>{{ rev.plate_number || rev.plate || rev.plate_status }}</td>
+          <!-- Support `review_status` for backward compatibility. -->
+          <td>{{ rev.status || rev.review_status }}</td>
           <td>
             <router-link :to="`/manual-reviews/${rev.id}`" class="btn btn-sm btn-secondary">View</router-link>
           </td>

@@ -2,8 +2,8 @@
   <div v-if="review">
     <h1>Manual Review #{{ review.id }}</h1>
     <ul class="list-group mb-3">
-      <li class="list-group-item">Status: {{ review.status }}</li>
-      <li class="list-group-item">Detected Plate: {{ review.plate_number }}</li>
+      <li class="list-group-item">Status: {{ review.status || review.review_status }}</li>
+      <li class="list-group-item">Detected Plate: {{ review.plate_number || review.plate || review.plate_status }}</li>
     </ul>
 
     <div v-if="plateImage" class="mb-3">
