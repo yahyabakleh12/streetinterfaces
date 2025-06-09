@@ -1,6 +1,6 @@
 # Parking Management UI
 
-This repository contains a simple frontend built with **Vue 3** and **Vite**. It provides a basic interface for managing parking cameras and demonstrates CRUD operations against a REST API.
+This repository contains a simple frontend built with **Vue 3** and **Vite**. It provides a basic interface for managing parking cameras, tickets, and other resources, demonstrating CRUD operations against a REST API.
 
 ## Getting Started
 
@@ -13,7 +13,7 @@ This repository contains a simple frontend built with **Vue 3** and **Vite**. It
    npm run dev
    ```
 
-The application expects a backend available at `http://127.0.0.1:18006`. If your API runs elsewhere, update the `baseURL` setting in [`src/services/cameraService.js`](src/services/cameraService.js).
+The application expects a backend available at `http://127.0.0.1:18006`. If your API runs elsewhere, update the `baseURL` setting in the service files under [`src/services`](src/services).
 
 ## Building for Production
 
