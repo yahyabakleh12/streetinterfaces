@@ -15,6 +15,10 @@ import PolesList from '@/components/poles/PolesList.vue'
 import PoleForm   from '@/components/poles/PoleForm.vue'
 import PoleDetail from '@/components/poles/PoleDetail.vue'
 
+import TicketsList from '@/components/tickets/TicketsList.vue'
+import TicketForm   from '@/components/tickets/TicketForm.vue'
+import TicketDetail from '@/components/tickets/TicketDetail.vue'
+
 const routes = [
   { path: '/', redirect: '/cameras' },
   { path: '/cameras',          component: CamerasList },
@@ -35,6 +39,11 @@ const routes = [
   { path: '/poles/create',   component: PoleForm,   props: { isEdit: false } },
   { path: '/poles/:id/edit', component: PoleForm,   props: route => ({ isEdit: true, id: +route.params.id }) },
   { path: '/poles/:id',      component: PoleDetail, props: true },
+
+  { path: '/tickets',          component: TicketsList },
+  { path: '/tickets/create',   component: TicketForm,   props: { isEdit: false } },
+  { path: '/tickets/:id/edit', component: TicketForm,   props: route => ({ isEdit: true, id: +route.params.id }) },
+  { path: '/tickets/:id',      component: TicketDetail, props: true },
 ]
 
 export default createRouter({
