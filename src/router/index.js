@@ -21,8 +21,11 @@ import TicketDetail from '@/components/tickets/TicketDetail.vue'
 
 import ManualReviewsList from '@/components/manualReviews/ManualReviewsList.vue'
 import ManualReviewDetail from '@/components/manualReviews/ManualReviewDetail.vue'
+import Login from '@/components/Login.vue'
+import { useAuthStore } from '@/stores/auth'
 
 const routes = [
+  { path: '/login', component: Login },
   { path: '/', redirect: '/cameras' },
   { path: '/cameras',          component: CamerasList },
   { path: '/cameras/create',   component: CameraForm,   props: { isEdit: false } },
@@ -52,7 +55,20 @@ const routes = [
   { path: '/manual-reviews/:id', component: ManualReviewDetail, props: true },
 ]
 
-export default createRouter({
+const router = createRouter({
   history: createWebHistory(),
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  const publicPages = ['/login']
+  const authRequired = !publicPages.includes(to.path)
+  const auth = useAuthStore()
+
+  if (authRequired && !auth.token) {
+    return next('/login')
+  }
+  next()
+})
+
+export default router

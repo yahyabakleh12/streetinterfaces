@@ -1,9 +1,4 @@
-import axios from 'axios'
-
-const API = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-  timeout: 5000,
-})
+import API from './api'
 
 export default {
   getAll()           { return API.get('/cameras') },
