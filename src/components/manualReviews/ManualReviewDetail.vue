@@ -28,6 +28,14 @@
       <input v-model="correction.plate_number" class="form-control mb-2" placeholder="Plate number" />
       <input v-model="correction.plate_code" class="form-control mb-2" placeholder="Plate code" />
       <input v-model="correction.plate_city" class="form-control mb-2" placeholder="Plate city" />
+      <input
+        v-model.number="correction.confidence"
+        type="number"
+        min="0"
+        max="100"
+        class="form-control mb-2"
+        placeholder="Confidence (0-100)"
+      />
       <button class="btn btn-primary me-2" @click="submitCorrection">Submit</button>
       <button class="btn btn-danger" @click="dismiss">Dismiss</button>
     </div>
@@ -53,6 +61,7 @@ const correction = ref({
   plate_number: '',
   plate_code: '',
   plate_city: '',
+  confidence: 0,
 })
 
 onMounted(async () => {
