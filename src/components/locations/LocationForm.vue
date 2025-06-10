@@ -22,6 +22,18 @@
         <label class="form-label">IP Schema</label>
         <input v-model="form.ip_schema" class="form-control" />
       </div>
+      <div class="mb-3">
+        <label class="form-label">Parkonic API Token</label>
+        <input v-model="form.parkonic_api_token" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Camera User</label>
+        <input v-model="form.camera_user" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Camera Password</label>
+        <input v-model="form.camera_pass" class="form-control" />
+      </div>
       <button type="submit" class="btn btn-primary">Save</button>
     </form>
   </div>
@@ -42,7 +54,10 @@ const form = reactive({
   code: '',
   portal_name: '',
   portal_password: '',
-  ip_schema: ''
+  ip_schema: '',
+  parkonic_api_token: '',
+  camera_user: '',
+  camera_pass: ''
 })
 
 onMounted(async () => {

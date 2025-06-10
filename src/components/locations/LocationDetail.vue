@@ -6,6 +6,9 @@
       <li class="list-group-item">Code: {{ location.code }}</li>
       <li class="list-group-item">Portal Name: {{ location.portal_name }}</li>
       <li class="list-group-item">IP Schema: {{ location.ip_schema }}</li>
+      <li class="list-group-item">Parkonic API Token: {{ location.parkonic_api_token }}</li>
+      <li class="list-group-item">Camera User: {{ location.camera_user }}</li>
+      <li class="list-group-item">Camera Password: {{ location.camera_pass }}</li>
     </ul>
     <router-link to="/locations" class="btn btn-secondary">Back to list</router-link>
   </div>
