@@ -10,6 +10,8 @@
         <router-link class="nav-link" to="/poles">Poles</router-link>
         <router-link class="nav-link" to="/tickets">Tickets</router-link>
         <router-link class="nav-link" to="/manual-reviews">Manual Reviews</router-link>
+        <router-link v-if="!auth.token" class="nav-link" to="/login">Login</router-link>
+        <a v-else class="nav-link" href="#" @click.prevent="logout">Logout</a>
       </div>
     </div>
   </nav>
@@ -17,3 +19,16 @@
     <router-view />
   </div>
 </template>
+
+<script setup>
+import { useAuthStore } from '@/stores/auth'
+import { useRouter } from 'vue-router'
+
+const auth = useAuthStore()
+const router = useRouter()
+
+function logout() {
+  auth.clearToken()
+  router.push('/login')
+}
+</script>

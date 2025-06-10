@@ -20,6 +20,20 @@ This repository contains a simple frontend built with **Vue 3** and **Vite**. It
 
 The application reads `VITE_API_BASE_URL` from the environment to locate the backend API. The default value in `.env` points to `http://127.0.0.1:18006`.
 
+## Authentication
+
+All API endpoints are now protected by JWT authentication. Obtain a token by
+sending your username and password to the `/token` endpoint:
+
+```bash
+curl -X POST http://127.0.0.1:18006/token \
+     -d 'username=<user>' -d 'password=<pass>'
+```
+
+The returned `access_token` can be used to sign in through the `/login` page of
+the UI. After logging in, the token will be stored in the browser and
+automatically sent with every request.
+
 ## Building for Production
 
 Generate optimized assets in the `dist` directory with:
