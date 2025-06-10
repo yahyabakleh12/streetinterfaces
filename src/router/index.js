@@ -21,7 +21,6 @@ import TicketDetail from '@/components/tickets/TicketDetail.vue'
 
 import ManualReviewsList from '@/components/manualReviews/ManualReviewsList.vue'
 import ManualReviewDetail from '@/components/manualReviews/ManualReviewDetail.vue'
-import ManualTransactionsList from '@/components/manualTransactions/ManualTransactionsList.vue'
 
 const routes = [
   { path: '/', redirect: '/cameras' },
@@ -51,7 +50,6 @@ const routes = [
 
   { path: '/manual-reviews', component: ManualReviewsList },
   { path: '/manual-reviews/:id', component: ManualReviewDetail, props: true },
-  { path: '/manual-transactions', component: ManualTransactionsList },
 ]
 
 export default createRouter({
