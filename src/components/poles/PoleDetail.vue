@@ -3,6 +3,7 @@
     <h1>Pole #{{ pole.id }}</h1>
     <ul class="list-group mb-3">
       <li class="list-group-item">Code: {{ pole.code }}</li>
+      <li class="list-group-item">API Pole ID: {{ pole.api_pole_id }}</li>
       <li class="list-group-item">Zone ID: {{ pole.zone_id }}</li>
       <li class="list-group-item">Location ID: {{ pole.location_id }}</li>
       <li class="list-group-item"># Cameras: {{ pole.number_of_cameras }}</li>
