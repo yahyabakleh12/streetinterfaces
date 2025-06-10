@@ -7,6 +7,10 @@
         <input v-model="form.zone_id" type="number" class="form-control" />
       </div>
       <div class="mb-3">
+        <label class="form-label">API Pole ID</label>
+        <input v-model="form.api_pole_id" class="form-control" />
+      </div>
+      <div class="mb-3">
         <label class="form-label">Code</label>
         <input v-model="form.code" class="form-control" />
       </div>
@@ -35,6 +39,7 @@ const props = defineProps({ isEdit: Boolean, id: Number })
 
 const form = reactive({
   zone_id: 1,
+  api_pole_id: '',
   code: '',
   location_id: 1,
   number_of_cameras: 0

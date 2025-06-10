@@ -5,12 +5,13 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>ID</th><th>Code</th><th>Zone</th><th>Location</th><th>Actions</th>
+          <th>ID</th><th>API Pole ID</th><th>Code</th><th>Zone</th><th>Location</th><th>Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="pole in poles" :key="pole.id">
           <td>{{ pole.id }}</td>
+          <td>{{ pole.api_pole_id }}</td>
           <td>{{ pole.code }}</td>
           <td>{{ pole.zone_id }}</td>
           <td>{{ pole.location_id }}</td>
