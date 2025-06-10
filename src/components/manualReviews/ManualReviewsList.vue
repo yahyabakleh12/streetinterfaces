@@ -18,6 +18,7 @@
           <th>Camera ID</th>
           <th>spot_number</th>
           <th>event_time</th>
+          <th>Plate</th>
           <th>Status</th>
           <th>Actions</th>
         </tr>
@@ -28,10 +29,28 @@
           <td>{{ rev.camera_id }}</td>
           <td>{{ rev.spot_number }}</td>
           <td>{{ rev.event_time }}</td>
+          <td>
+            <img
+              v-if="images[rev.id]"
+              :src="images[rev.id]"
+              class="img-thumbnail"
+              style="max-width: 80px"
+            />
+          </td>
           <!-- Support `review_status` for backward compatibility. -->
           <td>{{ rev.plate_status || rev.review_status }}</td>
           <td>
-            <router-link :to="`/manual-reviews/${rev.id}`" class="btn btn-sm btn-secondary">View</router-link>
+            <router-link
+              :to="`/manual-reviews/${rev.id}`"
+              class="btn btn-sm btn-secondary me-1"
+              >View</router-link
+            >
+            <button
+              class="btn btn-sm btn-danger"
+              @click.prevent="dismiss(rev.id)"
+            >
+              Dismiss
+            </button>
           </td>
         </tr>
       </tbody>
@@ -58,6 +77,7 @@ const page = ref(1)
 const pageSize = ref(50)
 const total = ref(0)
 const status = ref('PENDING')
+const images = ref({})
 
 async function fetchReviews() {
   const { data } = await manualReviewService.getAll({
@@ -67,6 +87,26 @@ async function fetchReviews() {
   })
   reviews.value = data.data ?? data.items ?? data
   total.value = data.total ?? reviews.value.length
+  loadImages()
+}
+
+async function loadImages() {
+  images.value = {}
+  await Promise.all(
+    reviews.value.map(async rev => {
+      try {
+        const { data } = await manualReviewService.getImage(rev.id)
+        images.value[rev.id] = URL.createObjectURL(data)
+      } catch (_) {}
+    })
+  )
+}
+
+async function dismiss(id) {
+  if (confirm('Dismiss this review?')) {
+    await manualReviewService.dismiss(id)
+    fetchReviews()
+  }
 }
 
 function nextPage() {
