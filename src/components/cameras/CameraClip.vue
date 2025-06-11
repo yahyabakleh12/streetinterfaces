@@ -12,11 +12,11 @@
       </div>
       <div class="mb-3">
         <label class="form-label">Start</label>
-        <input type="datetime-local" v-model="start" class="form-control" />
+        <input type="datetime-local" step="1" v-model="start" class="form-control" />
       </div>
       <div class="mb-3">
         <label class="form-label">End</label>
-        <input type="datetime-local" v-model="end" class="form-control" />
+        <input type="datetime-local" step="1" v-model="end" class="form-control" />
       </div>
       <button type="submit" class="btn btn-primary">Get Clip</button>
     </form>
