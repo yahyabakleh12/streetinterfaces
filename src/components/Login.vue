@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="text-center">
+    <img src="/vite.svg" alt="Logo" class="mb-3" style="height: 64px;">
     <h1>Login</h1>
     <form @submit.prevent="submit">
       <div class="mb-3">

@@ -1,25 +1,29 @@
 <!-- App.vue -->
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
-    <div class="container">
-      <router-link class="navbar-brand" to="/">Street</router-link>
-      <div class="navbar-nav">
-        <router-link class="nav-link" to="/cameras">Cameras</router-link>
-        <router-link class="nav-link" to="/locations">Locations</router-link>
-        <router-link class="nav-link" to="/zones">Zones</router-link>
-        <router-link class="nav-link" to="/poles">Poles</router-link>
-        <router-link class="nav-link" to="/tickets">Tickets</router-link>
-        <router-link class="nav-link" to="/manual-reviews">Manual Reviews</router-link>
-        <router-link v-if="auth.roles.includes('admin')" class="nav-link" to="/users">Users</router-link>
-        <router-link v-if="auth.roles.includes('admin')" class="nav-link" to="/roles">Roles</router-link>
-        <router-link v-if="auth.roles.includes('admin')" class="nav-link" to="/permissions">Permissions</router-link>
-        <router-link v-if="!auth.token" class="nav-link" to="/login">Login</router-link>
-        <a v-else class="nav-link" href="#" @click.prevent="logout">Logout</a>
+  <div class="d-flex">
+    <nav class="sidebar bg-primary text-light p-3">
+      <div class="text-center mb-4">
+        <img src="/vite.svg" alt="Logo" class="img-fluid mb-2" style="height: 40px;">
+        <router-link class="navbar-brand text-light" to="/statistics">Street</router-link>
       </div>
+      <ul class="nav flex-column">
+        <li class="nav-item"><router-link class="nav-link text-light" to="/statistics">Statistics</router-link></li>
+        <li class="nav-item"><router-link class="nav-link text-light" to="/cameras">Cameras</router-link></li>
+        <li class="nav-item"><router-link class="nav-link text-light" to="/locations">Locations</router-link></li>
+        <li class="nav-item"><router-link class="nav-link text-light" to="/zones">Zones</router-link></li>
+        <li class="nav-item"><router-link class="nav-link text-light" to="/poles">Poles</router-link></li>
+        <li class="nav-item"><router-link class="nav-link text-light" to="/tickets">Tickets</router-link></li>
+        <li class="nav-item"><router-link class="nav-link text-light" to="/manual-reviews">Manual Reviews</router-link></li>
+        <li class="nav-item" v-if="auth.roles.includes('admin')"><router-link class="nav-link text-light" to="/users">Users</router-link></li>
+        <li class="nav-item" v-if="auth.roles.includes('admin')"><router-link class="nav-link text-light" to="/roles">Roles</router-link></li>
+        <li class="nav-item" v-if="auth.roles.includes('admin')"><router-link class="nav-link text-light" to="/permissions">Permissions</router-link></li>
+        <li class="nav-item" v-if="!auth.token"><router-link class="nav-link text-light" to="/login">Login</router-link></li>
+        <li class="nav-item" v-else><a class="nav-link text-light" href="#" @click.prevent="logout">Logout</a></li>
+      </ul>
+    </nav>
+    <div class="flex-grow-1 p-3">
+      <router-view />
     </div>
-  </nav>
-  <div class="container">
-    <router-view />
   </div>
 </template>
 

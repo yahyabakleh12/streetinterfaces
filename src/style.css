@@ -8,3 +8,8 @@ body {
   background-color: #121212;
   color: #f8f9fa;
 }
+
+.sidebar {
+  width: 220px;
+  min-height: 100vh;
+}
