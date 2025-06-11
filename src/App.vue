@@ -9,6 +9,7 @@
       <ul class="nav flex-column">
         <li class="nav-item"><router-link class="nav-link text-light" to="/statistics">Statistics</router-link></li>
         <li class="nav-item"><router-link class="nav-link text-light" to="/cameras">Cameras</router-link></li>
+        <li class="nav-item"><router-link class="nav-link text-light" to="/camera-clip">Camera Clip</router-link></li>
         <li class="nav-item"><router-link class="nav-link text-light" to="/locations">Locations</router-link></li>
         <li class="nav-item"><router-link class="nav-link text-light" to="/zones">Zones</router-link></li>
         <li class="nav-item"><router-link class="nav-link text-light" to="/poles">Poles</router-link></li>
