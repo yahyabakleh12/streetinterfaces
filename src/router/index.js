@@ -30,12 +30,14 @@ import RoleDetail from '@/components/roles/RoleDetail.vue'
 import PermissionsList from '@/components/permissions/PermissionsList.vue'
 import PermissionForm from '@/components/permissions/PermissionForm.vue'
 import PermissionDetail from '@/components/permissions/PermissionDetail.vue'
+import Statistics from '@/components/Statistics.vue'
 import Login from '@/components/Login.vue'
 import { useAuthStore } from '@/stores/auth'
 
 const routes = [
   { path: '/login', component: Login },
-  { path: '/', redirect: '/cameras' },
+  { path: '/', redirect: '/statistics' },
+  { path: '/statistics', component: Statistics },
   { path: '/cameras',          component: CamerasList },
   { path: '/cameras/create',   component: CameraForm,   props: { isEdit: false } },
   { path: '/cameras/:id/edit', component: CameraForm,   props: route => ({ isEdit: true, id: +route.params.id }) },
