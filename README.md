@@ -1,6 +1,7 @@
 # Parking Management UI
 
 This repository contains a simple frontend built with **Vue 3** and **Vite**. It provides a basic interface for managing parking cameras, tickets, and other resources, demonstrating CRUD operations against a REST API.
+Recent updates introduce management screens for **Users**, **Roles** and **Permissions**. Access to these pages is restricted to accounts with the `admin` role which is extracted from the JWT token.
 
 ## Getting Started
 
