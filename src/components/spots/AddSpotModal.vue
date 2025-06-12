@@ -13,7 +13,7 @@
           </div>
           <div v-if="!imageUrl && !error">Loading frame...</div>
           <div v-else-if="imageUrl" style="position: relative; display: inline-block;" @click="recordPoint">
-            <img :src="imageUrl" ref="img" class="img-fluid" />
+            <img :src="imageUrl" ref="img" class="img-fluid" @load="onImgLoad" />
             <svg
               v-if="imgWidth && imgHeight"
               :width="imgWidth"
@@ -46,7 +46,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick, computed } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import cameraService from '@/services/cameraService'
 import spotService from '@/services/spotService'
 
@@ -74,16 +74,18 @@ async function loadFrame() {
     error.value = ''
     const { data } = await cameraService.getFrame(props.cameraId)
     imageUrl.value = URL.createObjectURL(data)
-    await nextTick()
-    // store both natural and displayed dimensions
-    naturalWidth.value = img.value.naturalWidth
-    naturalHeight.value = img.value.naturalHeight
-    imgWidth.value = img.value.clientWidth
-    imgHeight.value = img.value.clientHeight
   } catch (err) {
     console.error(err)
     error.value = 'Failed to load frame.'
   }
+}
+
+function onImgLoad(e) {
+  const el = e.target
+  naturalWidth.value = el.naturalWidth
+  naturalHeight.value = el.naturalHeight
+  imgWidth.value = el.clientWidth
+  imgHeight.value = el.clientHeight
 }
 
 function recordPoint(e) {
