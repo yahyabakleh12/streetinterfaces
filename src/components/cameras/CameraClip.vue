@@ -42,6 +42,9 @@ onMounted(async () => {
   try {
     const { data } = await cameraService.getAll()
     cameras.value = data
+    if (!selectedCamera.value && cameras.value.length) {
+      selectedCamera.value = cameras.value[0].id
+    }
   } catch (_) {
     error.value = 'Failed to load cameras'
   }
@@ -50,6 +53,10 @@ onMounted(async () => {
 async function fetchClip() {
   videoUrl.value = ''
   error.value = ''
+  if (!selectedCamera.value) {
+    error.value = 'Please select a camera'
+    return
+  }
   try {
     const { data } = await cameraService.getClip(selectedCamera.value, {
       start: start.value,
