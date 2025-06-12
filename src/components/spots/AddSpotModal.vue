@@ -36,7 +36,9 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" @click="reset">Reset</button>
+
           <button class="btn btn-primary" :disabled="points.length !== 4 || !spotNumber || !!error" @click="save">Save</button>
+
         </div>
       </div>
     </div>
@@ -57,9 +59,11 @@ const img = ref(null)
 const imgWidth = ref(0)
 const imgHeight = ref(0)
 const spotNumber = ref(null)
+
 const error = ref('')
 
 onMounted(loadFrame)
+
 
 async function loadFrame() {
   try {
