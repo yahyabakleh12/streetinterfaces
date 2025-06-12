@@ -19,6 +19,7 @@
           <td>
             <router-link :to="`/cameras/${cam.id}`" class="btn btn-sm btn-secondary me-1">View</router-link>
             <router-link :to="`/cameras/${cam.id}/spots`" class="btn btn-sm btn-secondary me-1">Spots</router-link>
+            <router-link :to="`/cameras/${cam.id}/all-spots`" class="btn btn-sm btn-secondary me-1">All Spots</router-link>
             <router-link :to="`/cameras/${cam.id}/edit`" class="btn btn-sm btn-secondary me-1">Edit</router-link>
             <button class="btn btn-sm btn-danger" @click.prevent="deleteCamera(cam.id)">Delete</button>
           </td>
