@@ -56,8 +56,12 @@ const emit = defineEmits(['close', 'saved'])
 const imageUrl = ref('')
 const points = ref([])
 const img = ref(null)
+// dimensions used for rendering the SVG overlay
 const imgWidth = ref(0)
 const imgHeight = ref(0)
+// natural dimensions of the image for converting points
+const naturalWidth = ref(0)
+const naturalHeight = ref(0)
 const spotNumber = ref(null)
 
 const error = ref('')
@@ -71,8 +75,11 @@ async function loadFrame() {
     const { data } = await cameraService.getFrame(props.cameraId)
     imageUrl.value = URL.createObjectURL(data)
     await nextTick()
-    imgWidth.value = img.value.naturalWidth
-    imgHeight.value = img.value.naturalHeight
+    // store both natural and displayed dimensions
+    naturalWidth.value = img.value.naturalWidth
+    naturalHeight.value = img.value.naturalHeight
+    imgWidth.value = img.value.clientWidth
+    imgHeight.value = img.value.clientHeight
   } catch (err) {
     console.error(err)
     error.value = 'Failed to load frame.'
@@ -91,15 +98,22 @@ function reset() {
 }
 
 async function save() {
-  const xs = points.value.map(p => p.x)
-  const ys = points.value.map(p => p.y)
+  const ratioX = naturalWidth.value / imgWidth.value
+  const ratioY = naturalHeight.value / imgHeight.value
+  // convert recorded points from displayed to natural coordinates
+  const naturalPoints = points.value.map(p => ({
+    x: p.x * ratioX,
+    y: p.y * ratioY,
+  }))
+  const xs = naturalPoints.map(p => p.x)
+  const ys = naturalPoints.map(p => p.y)
   const payload = {
     camera_id: props.cameraId,
     spot_number: spotNumber.value,
-    bbox_x1: Math.min(...xs),
-    bbox_y1: Math.min(...ys),
-    bbox_x2: Math.max(...xs),
-    bbox_y2: Math.max(...ys),
+    bbox_x1: Math.round(Math.min(...xs)),
+    bbox_y1: Math.round(Math.min(...ys)),
+    bbox_x2: Math.round(Math.max(...xs)),
+    bbox_y2: Math.round(Math.max(...ys)),
   }
   await spotService.create(payload)
   emit('saved')
