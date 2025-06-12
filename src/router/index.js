@@ -3,6 +3,7 @@ import CamerasList from '@/components/cameras/CamerasList.vue'
 import CameraForm   from '@/components/cameras/CameraForm.vue'
 import CameraDetail from '@/components/cameras/CameraDetail.vue'
 import CameraClip from '@/components/cameras/CameraClip.vue'
+import CameraSpots from '@/components/spots/CameraSpots.vue'
 
 import LocationsList from '@/components/locations/LocationsList.vue'
 import LocationForm   from '@/components/locations/LocationForm.vue'
@@ -43,6 +44,7 @@ const routes = [
   { path: '/cameras/create',   component: CameraForm,   props: { isEdit: false } },
   { path: '/cameras/:id/edit', component: CameraForm,   props: route => ({ isEdit: true, id: +route.params.id }) },
   { path: '/cameras/:id',      component: CameraDetail, props: true },
+  { path: '/cameras/:id/spots', component: CameraSpots },
   { path: '/camera-clip',      component: CameraClip },
   { path: '/locations',          component: LocationsList },
   { path: '/locations/create',   component: LocationForm, props: { isEdit: false } },

@@ -12,4 +12,9 @@ export default {
       responseType: 'blob',
     })
   },
+  getFrame(camId) {
+    return API.get(`/cameras/${camId}/frame`, {
+      responseType: 'blob',
+    })
+  },
 }
