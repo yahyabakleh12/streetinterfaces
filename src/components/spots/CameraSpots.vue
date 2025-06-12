@@ -6,6 +6,7 @@
       <thead>
         <tr>
           <th>ID</th>
+          <th>Number</th>
           <th>BBox</th>
           <th>Actions</th>
         </tr>
@@ -13,6 +14,7 @@
       <tbody>
         <tr v-for="spot in spots" :key="spot.id">
           <td>{{ spot.id }}</td>
+          <td>{{ spot.spot_number }}</td>
           <td>{{ spot.bbox_x1 }},{{ spot.bbox_y1 }},{{ spot.bbox_x2 }},{{ spot.bbox_y2 }}</td>
           <td>
             <button class="btn btn-sm btn-danger" @click.prevent="removeSpot(spot.id)">Delete</button>
