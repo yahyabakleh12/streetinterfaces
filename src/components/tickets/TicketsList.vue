@@ -13,6 +13,7 @@
           <th>ID</th>
           <th>Plate Number</th>
           <th>Plate Code</th>
+          <th>Image</th>
           <th>Camera ID</th>
           <th>Spot Number</th>
           <th>Entry Time</th>
@@ -25,6 +26,12 @@
           <td>{{ ticket.id }}</td>
           <td>{{ ticket.plate_number }}</td>
           <td>{{ ticket.plate_code }}</td>
+          <td>
+            <img v-if="ticket.image_base64"
+                 :src="`data:image/jpeg;base64,${ticket.image_base64}`"
+                 class="img-thumbnail"
+                 style="max-width: 80px" />
+          </td>
           <td>{{ ticket.camera_id }}</td>
           <td>{{ ticket.spot_number }}</td>
           <td>{{ ticket.entry_time }}</td>
