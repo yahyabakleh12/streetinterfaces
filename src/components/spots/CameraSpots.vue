@@ -1,7 +1,11 @@
 <template>
   <div>
     <h1>Camera {{ camId }} Spots</h1>
-    <button class="btn btn-primary mb-3" @click="showAdd = true">Add Spot</button>
+    <button class="btn btn-primary mb-3 me-2" @click="showAdd = true">Add Spot</button>
+    <router-link
+      :to="`/cameras/${camId}/all-spots`"
+      class="btn btn-secondary mb-3"
+    >All Spots</router-link>
     <table class="table table-striped">
       <thead>
         <tr>
