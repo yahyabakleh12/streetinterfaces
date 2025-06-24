@@ -10,13 +10,10 @@
         :height="imgHeight"
         class="position-absolute top-0 start-0"
         style="pointer-events: none;">
-        <rect
+        <polygon
           v-for="spot in spots"
           :key="spot.id"
-          :x="boxFor(spot).x"
-          :y="boxFor(spot).y"
-          :width="boxFor(spot).width"
-          :height="boxFor(spot).height"
+          :points="polygonFor(spot)"
           fill="rgba(255,0,0,0.3)"
           stroke="red"
           stroke-width="2" />
@@ -69,15 +66,16 @@ function onImgLoad(e) {
   imgHeight.value = el.clientHeight
 }
 
-function boxFor(spot) {
-  if (!imgWidth.value) return { x:0, y:0, width:0, height:0 }
+function polygonFor(spot) {
+  if (!imgWidth.value) return ''
   const ratioX = imgWidth.value / naturalWidth.value
   const ratioY = imgHeight.value / naturalHeight.value
-  return {
-    x: spot.bbox_x1 * ratioX,
-    y: spot.bbox_y1 * ratioY,
-    width: (spot.bbox_x2 - spot.bbox_x1) * ratioX,
-    height: (spot.bbox_y2 - spot.bbox_y1) * ratioY
-  }
+  const pts = [
+    { x: spot.p1_x, y: spot.p1_y },
+    { x: spot.p2_x, y: spot.p2_y },
+    { x: spot.p3_x, y: spot.p3_y },
+    { x: spot.p4_x, y: spot.p4_y }
+  ]
+  return pts.map(p => `${p.x * ratioX},${p.y * ratioY}`).join(' ')
 }
 </script>
