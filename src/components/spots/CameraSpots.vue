@@ -7,7 +7,7 @@
         <tr>
           <th>ID</th>
           <th>Number</th>
-          <th>BBox</th>
+          <th>Points</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -15,7 +15,7 @@
         <tr v-for="spot in spots" :key="spot.id">
           <td>{{ spot.id }}</td>
           <td>{{ spot.spot_number }}</td>
-          <td>{{ spot.bbox_x1 }},{{ spot.bbox_y1 }},{{ spot.bbox_x2 }},{{ spot.bbox_y2 }}</td>
+          <td>{{ formatPoints(spot) }}</td>
           <td>
             <router-link :to="`/spots/${spot.id}`" class="btn btn-sm btn-secondary me-1">View</router-link>
             <button class="btn btn-sm btn-danger" @click.prevent="removeSpot(spot.id)">Delete</button>
@@ -39,6 +39,10 @@ const camId = +route.params.id
 
 const spots = ref([])
 const showAdd = ref(false)
+
+function formatPoints(s) {
+  return `${s.p1_x},${s.p1_y} ${s.p2_x},${s.p2_y} ${s.p3_x},${s.p3_y} ${s.p4_x},${s.p4_y}`
+}
 
 async function load() {
   const { data } = await spotService.getForCamera(camId)

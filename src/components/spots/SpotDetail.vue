@@ -8,17 +8,14 @@
     <div v-if="imageUrl" style="position: relative; display: inline-block;">
       <img :src="imageUrl" ref="img" class="img-fluid" @load="onImgLoad" />
       <svg
-        v-if="imgWidth && imgHeight && box"
+        v-if="imgWidth && imgHeight && polygon"
         :width="imgWidth"
         :height="imgHeight"
         class="position-absolute top-0 start-0"
         style="pointer-events: none;"
       >
-        <rect
-          :x="box.x"
-          :y="box.y"
-          :width="box.width"
-          :height="box.height"
+        <polygon
+          :points="polygon"
           fill="rgba(255,0,0,0.3)"
           stroke="red"
           stroke-width="2"
@@ -63,15 +60,16 @@ function onImgLoad(e) {
   imgHeight.value = el.clientHeight
 }
 
-const box = computed(() => {
-  if (!spot.value || !imgWidth.value) return null
+const polygon = computed(() => {
+  if (!spot.value || !imgWidth.value) return ''
   const ratioX = imgWidth.value / naturalWidth.value
   const ratioY = imgHeight.value / naturalHeight.value
-  return {
-    x: spot.value.bbox_x1 * ratioX,
-    y: spot.value.bbox_y1 * ratioY,
-    width: (spot.value.bbox_x2 - spot.value.bbox_x1) * ratioX,
-    height: (spot.value.bbox_y2 - spot.value.bbox_y1) * ratioY,
-  }
+  const pts = [
+    { x: spot.value.p1_x, y: spot.value.p1_y },
+    { x: spot.value.p2_x, y: spot.value.p2_y },
+    { x: spot.value.p3_x, y: spot.value.p3_y },
+    { x: spot.value.p4_x, y: spot.value.p4_y }
+  ]
+  return pts.map(p => `${p.x * ratioX},${p.y * ratioY}`).join(' ')
 })
 </script>

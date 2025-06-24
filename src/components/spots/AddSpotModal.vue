@@ -107,15 +107,22 @@ async function save() {
     x: p.x * ratioX,
     y: p.y * ratioY,
   }))
-  const xs = naturalPoints.map(p => p.x)
-  const ys = naturalPoints.map(p => p.y)
+  const rounded = naturalPoints.map(p => ({
+    x: Math.round(p.x),
+    y: Math.round(p.y)
+  }))
+  const [p1, p2, p3, p4] = rounded
   const payload = {
     camera_id: props.cameraId,
     spot_number: spotNumber.value,
-    bbox_x1: Math.round(Math.min(...xs)),
-    bbox_y1: Math.round(Math.min(...ys)),
-    bbox_x2: Math.round(Math.max(...xs)),
-    bbox_y2: Math.round(Math.max(...ys)),
+    p1_x: p1.x,
+    p1_y: p1.y,
+    p2_x: p2.x,
+    p2_y: p2.y,
+    p3_x: p3.x,
+    p3_y: p3.y,
+    p4_x: p4.x,
+    p4_y: p4.y,
   }
   await spotService.create(payload)
   emit('saved')
