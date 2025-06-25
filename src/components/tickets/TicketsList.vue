@@ -3,8 +3,68 @@
     <h1>Tickets</h1>
     <router-link to="/tickets/create" class="btn btn-primary mb-3">Add New Ticket</router-link>
     <div class="row mb-3">
-      <div class="col-md-6">
-        <input v-model="search" @keyup.enter="fetchTickets" type="text" placeholder="Search" class="form-control" />
+      <div class="col-md-3 mb-2">
+        <input
+          v-model="search"
+          @keyup.enter="fetchTickets"
+          type="text"
+          placeholder="Search"
+          class="form-control"
+        />
+      </div>
+      <div class="col-md-2 mb-2">
+        <input
+          v-model.number="cameraId"
+          type="number"
+          placeholder="Camera ID"
+          class="form-control"
+        />
+      </div>
+      <div class="col-md-2 mb-2">
+        <input
+          v-model.number="spotNumber"
+          type="number"
+          placeholder="Spot #"
+          class="form-control"
+        />
+      </div>
+      <div class="col-md-2 mb-2">
+        <input
+          v-model="plateNumber"
+          type="text"
+          placeholder="Plate Number"
+          class="form-control"
+        />
+      </div>
+      <div class="col-md-1 mb-2">
+        <input
+          v-model="plateCode"
+          type="text"
+          placeholder="Code"
+          class="form-control"
+        />
+      </div>
+      <div class="col-md-2 mb-2">
+        <input
+          v-model="plateCity"
+          type="text"
+          placeholder="Emirate"
+          class="form-control"
+        />
+      </div>
+      <div class="col-md-3 mb-2">
+        <input
+          v-model="entryStart"
+          type="datetime-local"
+          class="form-control"
+        />
+      </div>
+      <div class="col-md-3 mb-2">
+        <input
+          v-model="entryEnd"
+          type="datetime-local"
+          class="form-control"
+        />
       </div>
     </div>
     <table class="table table-striped">
@@ -65,6 +125,13 @@ const tickets = ref([])
 const page = ref(1)
 const pageSize = ref(50)
 const search = ref('')
+const cameraId = ref(null)
+const spotNumber = ref(null)
+const plateNumber = ref('')
+const plateCode = ref('')
+const plateCity = ref('')
+const entryStart = ref('')
+const entryEnd = ref('')
 const total = ref(0)
 
 async function fetchTickets() {
@@ -72,6 +139,13 @@ async function fetchTickets() {
     page: page.value,
     page_size: pageSize.value,
     search: search.value || undefined,
+    camera_id: cameraId.value || undefined,
+    spot_number: spotNumber.value || undefined,
+    plate_number: plateNumber.value || undefined,
+    plate_code: plateCode.value || undefined,
+    plate_city: plateCity.value || undefined,
+    entry_start: entryStart.value || undefined,
+    entry_end: entryEnd.value || undefined,
   })
   // The API may return tickets under `data` or `items`.
   // Normalize to always store just the array of tickets.
@@ -95,10 +169,13 @@ async function deleteTicket(id) {
 }
 
 watch([page, pageSize], fetchTickets)
-watch(search, () => {
-  page.value = 1
-  fetchTickets()
-})
+watch(
+  [search, cameraId, spotNumber, plateNumber, plateCode, plateCity, entryStart, entryEnd],
+  () => {
+    page.value = 1
+    fetchTickets()
+  }
+)
 
 onMounted(fetchTickets)
 </script>
