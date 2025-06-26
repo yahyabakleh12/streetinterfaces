@@ -53,8 +53,8 @@ async function deleteCamera(id) {
 
 function rowClass(cam) {
   const status = (cam.status || '').toString().toLowerCase()
-  if (status === 'online') return 'table-success'
-  if (status === 'offline') return 'table-danger'
+  if (status == 'ONLINE') return 'text-success'
+  if (status == 'OFFLINE') return 'text-success'
   return ''
 }
 
