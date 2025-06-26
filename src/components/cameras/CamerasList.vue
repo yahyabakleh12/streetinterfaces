@@ -10,7 +10,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="cam in cameras" :key="cam.id">
+        <tr v-for="cam in cameras" :key="cam.id" :class="rowClass(cam)">
           <td>{{ cam.id }}</td>
           <td>{{ cam.pole_id }}</td>
           <td>{{ cam.portal_id }}</td>
@@ -49,6 +49,13 @@ async function deleteCamera(id) {
     await cameraService.remove(id)
     load()
   }
+}
+
+function rowClass(cam) {
+  const status = (cam.status || '').toString().toLowerCase()
+  if (status === 'online') return 'table-success'
+  if (status === 'offline') return 'table-danger'
+  return ''
 }
 
 function exportExcel() {
