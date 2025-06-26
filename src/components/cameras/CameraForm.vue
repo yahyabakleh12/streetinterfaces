@@ -7,6 +7,10 @@
         <input v-model="form.pole_id" type="number" class="form-control" />
       </div>
       <div class="mb-3">
+        <label class="form-label">Portal ID</label>
+        <input v-model="form.portal_id" type="number" class="form-control" />
+      </div>
+      <div class="mb-3">
         <label class="form-label">API Code</label>
         <input v-model="form.api_code" class="form-control" />
       </div>
@@ -40,6 +44,7 @@ const props = defineProps({ isEdit: Boolean, id: Number })
 
 const form = reactive({
   pole_id: 1,
+  portal_id: 1,
   api_code: '',
   p_ip: '',
   number_of_parking: 0,
