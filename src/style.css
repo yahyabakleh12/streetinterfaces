@@ -1,15 +1,61 @@
 :root {
-  --bs-primary: #001f3f; /* navy */
-  --bs-secondary: #6c757d; /* grey */
+  --primary-color: #06283D; /* deep navy */
+  --accent-color: #00B4D8;  /* bright teal */
+  --secondary-accent: #FFC300; /* bright yellow */
+  --background-color: #FFFFFF; /* white */
+  --card-bg: #F7F9FC; /* light gray for cards */
 }
 
 body {
   padding: 1rem;
-  background-color: #121212;
-  color: #f8f9fa;
+  background-color: var(--background-color);
+  color: #212529;
+  font-family: "Inter", sans-serif;
 }
 
 .sidebar {
   width: 220px;
   min-height: 100vh;
+  background-color: var(--primary-color);
+}
+
+.sidebar .nav-link {
+  color: #ffffff;
+  margin-bottom: 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.sidebar .nav-link.router-link-active {
+  background-color: var(--accent-color);
+  color: #ffffff;
+}
+
+.card,
+.table {
+  background-color: var(--card-bg);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.btn-primary {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #0090b3;
+  border-color: #0090b3;
+}
+
+.btn-secondary,
+.badge-secondary {
+  background-color: var(--secondary-accent);
+  border-color: var(--secondary-accent);
+  color: #212529;
+}
+
+img {
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
