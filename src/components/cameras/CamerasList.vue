@@ -5,13 +5,14 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>ID</th><th>Pole ID</th><th>API Code</th><th>IP</th><th># Spots</th><th>VPN IP</th><th>Actions</th>
+          <th>ID</th><th>Pole ID</th><th>Portal ID</th><th>API Code</th><th>IP</th><th># Spots</th><th>VPN IP</th><th>Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="cam in cameras" :key="cam.id">
           <td>{{ cam.id }}</td>
           <td>{{ cam.pole_id }}</td>
+          <td>{{ cam.portal_id }}</td>
           <td>{{ cam.api_code }}</td>
           <td>{{ cam.p_ip }}</td>
           <td>{{ cam.number_of_parking }}</td>
