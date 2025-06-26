@@ -1,7 +1,7 @@
 <!-- App.vue -->
 <template>
   <div class="d-flex">
-    <nav class="sidebar bg-primary text-light p-3">
+    <nav v-if="showSidebar" class="sidebar text-light p-3">
       <div class="text-center mb-4">
         <img src="/vite.svg" alt="Logo" class="img-fluid mb-2" style="height: 40px;">
         <router-link class="navbar-brand text-light" to="/statistics">Street</router-link>
@@ -29,11 +29,15 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { useRouter } from 'vue-router'
 
 const auth = useAuthStore()
 const router = useRouter()
+const route = useRoute()
+
+const showSidebar = computed(() => route.path !== '/login')
 
 function logout() {
   auth.clearToken()

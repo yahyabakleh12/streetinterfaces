@@ -16,7 +16,7 @@ body {
 .sidebar {
   width: 220px;
   min-height: 100vh;
-  background-color: var(--primary-color);
+  background-color: #022e48;
 }
 
 .sidebar .nav-link {
