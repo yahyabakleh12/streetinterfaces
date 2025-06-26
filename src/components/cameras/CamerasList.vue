@@ -18,11 +18,7 @@
           <td>{{ cam.p_ip }}</td>
           <td>{{ cam.number_of_parking }}</td>
           <td>{{ cam.vpn_ip || '–' }}</td>
-          <td>
-            <span :class="cam.online ? 'text-success' : 'text-danger'">
-              {{ cam.online ? 'Online' : 'Offline' }}
-            </span>
-          </td>
+          <td>{{ cam.status}}</td>
           <td>
             <router-link :to="`/cameras/${cam.id}`" class="btn btn-sm btn-secondary me-1">View</router-link>
             <router-link :to="`/cameras/${cam.id}/spots`" class="btn btn-sm btn-secondary me-1">Spots</router-link>
@@ -64,7 +60,7 @@ function exportExcel() {
     IP: cam.p_ip,
     'Number of Spots': cam.number_of_parking,
     'VPN IP': cam.vpn_ip || '',
-    Status: cam.online ? 'Online' : 'Offline'
+    'Status': cam.status 
   }))
   const ws = XLSX.utils.json_to_sheet(rows)
   const wb = XLSX.utils.book_new()
