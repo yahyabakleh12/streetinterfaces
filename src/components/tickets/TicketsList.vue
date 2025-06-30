@@ -70,19 +70,19 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Plate Number</th>
-          <th>Plate Code</th>
+          <th @click="sortBy('id')" style="cursor:pointer">ID <span v-if="sortKey === 'id'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('plate_number')" style="cursor:pointer">Plate Number <span v-if="sortKey === 'plate_number'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('plate_code')" style="cursor:pointer">Plate Code <span v-if="sortKey === 'plate_code'">{{ sortAsc ? '▲' : '▼' }}</span></th>
           <th>Image</th>
-          <th>Camera ID</th>
-          <th>Spot Number</th>
-          <th>Entry Time</th>
-          <th>Exit Time</th>
+          <th @click="sortBy('camera_id')" style="cursor:pointer">Camera ID <span v-if="sortKey === 'camera_id'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('spot_number')" style="cursor:pointer">Spot Number <span v-if="sortKey === 'spot_number'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('entry_time')" style="cursor:pointer">Entry Time <span v-if="sortKey === 'entry_time'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('exit_time')" style="cursor:pointer">Exit Time <span v-if="sortKey === 'exit_time'">{{ sortAsc ? '▲' : '▼' }}</span></th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="ticket in tickets" :key="ticket.id">
+        <tr v-for="ticket in sortedTickets" :key="ticket.id">
           <td>{{ ticket.id }}</td>
           <td>{{ ticket.plate_number }}</td>
           <td>{{ ticket.plate_code }}</td>
@@ -120,8 +120,10 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue'
 import ticketService from '@/services/ticketService'
+import useSortable from '@/composables/useSortable'
 
 const tickets = ref([])
+const { sortKey, sortAsc, sortedItems: sortedTickets, sortBy } = useSortable(tickets, 'id')
 const page = ref(1)
 const pageSize = ref(50)
 const search = ref('')

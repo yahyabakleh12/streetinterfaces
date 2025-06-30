@@ -14,17 +14,17 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Camera ID</th>
-          <th>spot_number</th>
-          <th>event_time</th>
+          <th @click="sortBy('id')" style="cursor:pointer">ID <span v-if="sortKey === 'id'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('camera_id')" style="cursor:pointer">Camera ID <span v-if="sortKey === 'camera_id'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('spot_number')" style="cursor:pointer">spot_number <span v-if="sortKey === 'spot_number'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('event_time')" style="cursor:pointer">event_time <span v-if="sortKey === 'event_time'">{{ sortAsc ? '▲' : '▼' }}</span></th>
           <th>Plate</th>
-          <th>Status</th>
+          <th @click="sortBy('plate_status')" style="cursor:pointer">Status <span v-if="sortKey === 'plate_status'">{{ sortAsc ? '▲' : '▼' }}</span></th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="rev in reviews" :key="rev.id">
+        <tr v-for="rev in sortedReviews" :key="rev.id">
           <td>{{ rev.id }}</td>
           <td>{{ rev.camera_id }}</td>
           <td>{{ rev.spot_number }}</td>
@@ -71,8 +71,10 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import manualReviewService from '@/services/manualReviewService'
+import useSortable from '@/composables/useSortable'
 
 const reviews = ref([])
+const { sortKey, sortAsc, sortedItems: sortedReviews, sortBy } = useSortable(reviews, 'id')
 const page = ref(1)
 const pageSize = ref(50)
 const total = ref(0)

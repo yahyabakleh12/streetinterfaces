@@ -5,11 +5,14 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>ID</th><th>Name</th><th>Code</th><th>Actions</th>
+          <th @click="sortBy('id')" style="cursor:pointer">ID <span v-if="sortKey === 'id'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('name')" style="cursor:pointer">Name <span v-if="sortKey === 'name'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('code')" style="cursor:pointer">Code <span v-if="sortKey === 'code'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="loc in locations" :key="loc.id">
+        <tr v-for="loc in sortedLocations" :key="loc.id">
           <td>{{ loc.id }}</td>
           <td>{{ loc.name }}</td>
           <td>{{ loc.code }}</td>
@@ -27,8 +30,10 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import locationService from '@/services/locationService'
+import useSortable from '@/composables/useSortable'
 
 const locations = ref([])
+const { sortKey, sortAsc, sortedItems: sortedLocations, sortBy } = useSortable(locations, 'id')
 
 async function load() {
   const { data } = await locationService.getAll()
