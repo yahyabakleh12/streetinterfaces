@@ -34,7 +34,8 @@
               v-if="images[rev.id]"
               :src="images[rev.id]"
               class="img-thumbnail"
-              style="max-width: 80px"
+              style="max-width: 80px; cursor: pointer"
+              @click="openImage(images[rev.id])"
             />
           </td>
           <!-- Support `review_status` for backward compatibility. -->
@@ -65,6 +66,7 @@
         </li>
       </ul>
     </nav>
+    <ImageModal v-if="selectedImage" :image="selectedImage" @close="selectedImage = ''" />
   </div>
 </template>
 
@@ -72,6 +74,7 @@
 import { ref, onMounted, watch } from 'vue'
 import manualReviewService from '@/services/manualReviewService'
 import useSortable from '@/composables/useSortable'
+import ImageModal from './ImageModal.vue'
 
 const reviews = ref([])
 const { sortKey, sortAsc, sortedItems: sortedReviews, sortBy } = useSortable(reviews, 'id')
@@ -80,6 +83,7 @@ const pageSize = ref(50)
 const total = ref(0)
 const status = ref('PENDING')
 const images = ref({})
+const selectedImage = ref('')
 
 async function fetchReviews() {
   const { data } = await manualReviewService.getAll({
@@ -109,6 +113,10 @@ async function dismiss(id) {
     await manualReviewService.dismiss(id)
     fetchReviews()
   }
+}
+
+function openImage(img) {
+  selectedImage.value = img
 }
 
 function nextPage() {
