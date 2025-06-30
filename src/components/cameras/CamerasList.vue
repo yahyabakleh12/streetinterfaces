@@ -31,6 +31,7 @@
             <router-link :to="`/cameras/${cam.id}`" class="btn btn-sm btn-secondary me-1">View</router-link>
             <router-link :to="`/cameras/${cam.id}/spots`" class="btn btn-sm btn-secondary me-1">Spots</router-link>
             <router-link :to="`/cameras/${cam.id}/all-spots`" class="btn btn-sm btn-secondary me-1">All Spots</router-link>
+            <router-link :to="`/cameras/${cam.id}/crop-zones`" class="btn btn-sm btn-secondary me-1">Crop Zone</router-link>
             <router-link
               v-if="auth.isAdmin"
               :to="`/cameras/${cam.id}/edit`"

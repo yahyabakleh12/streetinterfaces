@@ -5,6 +5,7 @@ import CameraDetail from '@/components/cameras/CameraDetail.vue'
 import CameraClip from '@/components/cameras/CameraClip.vue'
 import CameraSpots from '@/components/spots/CameraSpots.vue'
 import CameraAllSpots from '@/components/spots/CameraAllSpots.vue'
+import CameraCropZones from '@/components/cropZones/CameraCropZones.vue'
 import SpotDetail from '@/components/spots/SpotDetail.vue'
 
 import LocationsList from '@/components/locations/LocationsList.vue'
@@ -48,6 +49,7 @@ const routes = [
   { path: '/cameras/:id',      component: CameraDetail, props: true },
   { path: '/cameras/:id/spots', component: CameraSpots },
   { path: '/cameras/:id/all-spots', component: CameraAllSpots },
+  { path: '/cameras/:id/crop-zones', component: CameraCropZones },
   { path: '/spots/:id', component: SpotDetail, props: true },
   { path: '/camera-clip',      component: CameraClip },
   { path: '/locations',          component: LocationsList },
