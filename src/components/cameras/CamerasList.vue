@@ -6,11 +6,19 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>ID</th><th>Pole ID</th><th>Portal ID</th><th>API Code</th><th>IP</th><th># Spots</th><th>VPN IP</th><th>Status</th><th>Actions</th>
+          <th @click="sortBy('id')" style="cursor:pointer">ID <span v-if="sortKey === 'id'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('pole_id')" style="cursor:pointer">Pole ID <span v-if="sortKey === 'pole_id'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('portal_id')" style="cursor:pointer">Portal ID <span v-if="sortKey === 'portal_id'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('api_code')" style="cursor:pointer">API Code <span v-if="sortKey === 'api_code'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('p_ip')" style="cursor:pointer">IP <span v-if="sortKey === 'p_ip'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('number_of_parking')" style="cursor:pointer"># Spots <span v-if="sortKey === 'number_of_parking'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('vpn_ip')" style="cursor:pointer">VPN IP <span v-if="sortKey === 'vpn_ip'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('status')" style="cursor:pointer">Status <span v-if="sortKey === 'status'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="cam in cameras" :key="cam.id" :class="rowClass(cam)">
+        <tr v-for="cam in sortedCameras" :key="cam.id" :class="rowClass(cam)">
           <td>{{ cam.id }}</td>
           <td>{{ cam.pole_id }}</td>
           <td>{{ cam.portal_id }}</td>
@@ -33,11 +41,29 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import cameraService from '@/services/cameraService'
 import * as XLSX from 'xlsx'
 
 const cameras = ref([])
+const sortKey = ref('id')
+const sortAsc = ref(true)
+
+const sortedCameras = computed(() => {
+  return [...cameras.value].sort((a, b) => {
+    const vA = a[sortKey.value]
+    const vB = b[sortKey.value]
+    if (vA == null) return 1
+    if (vB == null) return -1
+    if (typeof vA === 'number' && typeof vB === 'number')
+      return sortAsc.value ? vA - vB : vB - vA
+    const sA = vA.toString().toLowerCase()
+    const sB = vB.toString().toLowerCase()
+    if (sA < sB) return sortAsc.value ? -1 : 1
+    if (sA > sB) return sortAsc.value ? 1 : -1
+    return 0
+  })
+})
 
 async function load() {
   const { data } = await cameraService.getAll()
@@ -73,6 +99,15 @@ function exportExcel() {
   const wb = XLSX.utils.book_new()
   XLSX.utils.book_append_sheet(wb, ws, 'Cameras')
   XLSX.writeFile(wb, 'cameras.xlsx')
+}
+
+function sortBy(key) {
+  if (sortKey.value === key) {
+    sortAsc.value = !sortAsc.value
+  } else {
+    sortKey.value = key
+    sortAsc.value = true
+  }
 }
 
 onMounted(load)
