@@ -18,8 +18,16 @@
           <td>{{ loc.code }}</td>
           <td>
             <router-link :to="`/locations/${loc.id}`" class="btn btn-sm btn-secondary me-1">View</router-link>
-            <router-link :to="`/locations/${loc.id}/edit`" class="btn btn-sm btn-secondary me-1">Edit</router-link>
-            <button class="btn btn-sm btn-danger" @click.prevent="deleteLocation(loc.id)">Delete</button>
+            <router-link
+              v-if="auth.isAdmin"
+              :to="`/locations/${loc.id}/edit`"
+              class="btn btn-sm btn-secondary me-1"
+            >Edit</router-link>
+            <button
+              v-if="auth.isAdmin"
+              class="btn btn-sm btn-danger"
+              @click.prevent="deleteLocation(loc.id)"
+            >Delete</button>
           </td>
         </tr>
       </tbody>
@@ -31,9 +39,11 @@
 import { onMounted, ref } from 'vue'
 import locationService from '@/services/locationService'
 import useSortable from '@/composables/useSortable'
+import { useAuthStore } from '@/stores/auth'
 
 const locations = ref([])
 const { sortKey, sortAsc, sortedItems: sortedLocations, sortBy } = useSortable(locations, 'id')
+const auth = useAuthStore()
 
 async function load() {
   const { data } = await locationService.getAll()

@@ -40,7 +40,11 @@
           <td>{{ formatPoints(spot) }}</td>
           <td>
             <router-link :to="`/spots/${spot.id}`" class="btn btn-sm btn-secondary me-1">View</router-link>
-            <button class="btn btn-sm btn-danger" @click.prevent="removeSpot(spot.id)">Delete</button>
+            <button
+              v-if="auth.isAdmin"
+              class="btn btn-sm btn-danger"
+              @click.prevent="removeSpot(spot.id)"
+            >Delete</button>
           </td>
         </tr>
       </tbody>
@@ -56,6 +60,7 @@ import useSortable from '@/composables/useSortable'
 import { useRoute } from 'vue-router'
 import spotService from '@/services/spotService'
 import cameraService from '@/services/cameraService'
+import { useAuthStore } from '@/stores/auth'
 import AddSpotModal from './AddSpotModal.vue'
 
 const route = useRoute()
@@ -63,6 +68,7 @@ const camId = +route.params.id
 
 const spots = ref([])
 const { sortKey, sortAsc, sortedItems: sortedSpots, sortBy } = useSortable(spots, 'id')
+const auth = useAuthStore()
 const showAdd = ref(false)
 const camera = ref(null)
 const imageUrl = ref('')

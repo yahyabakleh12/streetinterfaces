@@ -98,8 +98,16 @@
           <td>{{ ticket.exit_time }}</td>
           <td>
             <router-link :to="`/tickets/${ticket.id}`" class="btn btn-sm btn-secondary me-1">View</router-link>
-            <router-link :to="`/tickets/${ticket.id}/edit`" class="btn btn-sm btn-secondary me-1">Edit</router-link>
-            <button class="btn btn-sm btn-danger" @click.prevent="deleteTicket(ticket.id)">Delete</button>
+            <router-link
+              v-if="auth.isAdmin"
+              :to="`/tickets/${ticket.id}/edit`"
+              class="btn btn-sm btn-secondary me-1"
+            >Edit</router-link>
+            <button
+              v-if="auth.isAdmin"
+              class="btn btn-sm btn-danger"
+              @click.prevent="deleteTicket(ticket.id)"
+            >Delete</button>
           </td>
         </tr>
       </tbody>
@@ -121,9 +129,11 @@
 import { onMounted, ref, watch } from 'vue'
 import ticketService from '@/services/ticketService'
 import useSortable from '@/composables/useSortable'
+import { useAuthStore } from '@/stores/auth'
 
 const tickets = ref([])
 const { sortKey, sortAsc, sortedItems: sortedTickets, sortBy } = useSortable(tickets, 'id')
+const auth = useAuthStore()
 const page = ref(1)
 const pageSize = ref(50)
 const search = ref('')
