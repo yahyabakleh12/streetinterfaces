@@ -5,11 +5,13 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>ID</th><th>Name</th><th>Actions</th>
+          <th @click="sortBy('id')" style="cursor:pointer">ID <span v-if="sortKey === 'id'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('name')" style="cursor:pointer">Name <span v-if="sortKey === 'name'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="r in roles" :key="r.id">
+        <tr v-for="r in sortedRoles" :key="r.id">
           <td>{{ r.id }}</td>
           <td>{{ r.name }}</td>
           <td>
@@ -26,8 +28,10 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import roleService from '@/services/roleService'
+import useSortable from '@/composables/useSortable'
 
 const roles = ref([])
+const { sortKey, sortAsc, sortedItems: sortedRoles, sortBy } = useSortable(roles, 'id')
 
 async function load() {
   const { data } = await roleService.getAll()

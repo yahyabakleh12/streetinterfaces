@@ -5,11 +5,13 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>ID</th><th>Name</th><th>Actions</th>
+          <th @click="sortBy('id')" style="cursor:pointer">ID <span v-if="sortKey === 'id'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('name')" style="cursor:pointer">Name <span v-if="sortKey === 'name'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="p in permissions" :key="p.id">
+        <tr v-for="p in sortedPermissions" :key="p.id">
           <td>{{ p.id }}</td>
           <td>{{ p.name }}</td>
           <td>
@@ -26,8 +28,10 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import permissionService from '@/services/permissionService'
+import useSortable from '@/composables/useSortable'
 
 const permissions = ref([])
+const { sortKey, sortAsc, sortedItems: sortedPermissions, sortBy } = useSortable(permissions, 'id')
 
 async function load() {
   const { data } = await permissionService.getAll()

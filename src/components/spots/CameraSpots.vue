@@ -27,14 +27,14 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Number</th>
-          <th>Points</th>
+          <th @click="sortBy('id')" style="cursor:pointer">ID <span v-if="sortKey === 'id'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('spot_number')" style="cursor:pointer">Number <span v-if="sortKey === 'spot_number'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('p1_x')" style="cursor:pointer">Points <span v-if="sortKey === 'p1_x'">{{ sortAsc ? '▲' : '▼' }}</span></th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="spot in spots" :key="spot.id">
+        <tr v-for="spot in sortedSpots" :key="spot.id">
           <td>{{ spot.id }}</td>
           <td>{{ spot.spot_number }}</td>
           <td>{{ formatPoints(spot) }}</td>
@@ -52,6 +52,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import useSortable from '@/composables/useSortable'
 import { useRoute } from 'vue-router'
 import spotService from '@/services/spotService'
 import cameraService from '@/services/cameraService'
@@ -61,6 +62,7 @@ const route = useRoute()
 const camId = +route.params.id
 
 const spots = ref([])
+const { sortKey, sortAsc, sortedItems: sortedSpots, sortBy } = useSortable(spots, 'id')
 const showAdd = ref(false)
 const camera = ref(null)
 const imageUrl = ref('')

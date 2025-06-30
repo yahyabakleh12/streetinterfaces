@@ -5,11 +5,14 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>ID</th><th>Username</th><th>Roles</th><th>Actions</th>
+          <th @click="sortBy('id')" style="cursor:pointer">ID <span v-if="sortKey === 'id'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('username')" style="cursor:pointer">Username <span v-if="sortKey === 'username'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('roles')" style="cursor:pointer">Roles <span v-if="sortKey === 'roles'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="u in users" :key="u.id">
+        <tr v-for="u in sortedUsers" :key="u.id">
           <td>{{ u.id }}</td>
           <td>{{ u.username }}</td>
           <td>{{ (u.roles || []).map(r => r.name).join(', ') }}</td>
@@ -27,8 +30,10 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import userService from '@/services/userService'
+import useSortable from '@/composables/useSortable'
 
 const users = ref([])
+const { sortKey, sortAsc, sortedItems: sortedUsers, sortBy } = useSortable(users, 'id')
 
 async function load() {
   const { data } = await userService.getAll()

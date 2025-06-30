@@ -5,11 +5,16 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>ID</th><th>API Pole ID</th><th>Code</th><th>Zone</th><th>Location</th><th>Actions</th>
+          <th @click="sortBy('id')" style="cursor:pointer">ID <span v-if="sortKey === 'id'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('api_pole_id')" style="cursor:pointer">API Pole ID <span v-if="sortKey === 'api_pole_id'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('code')" style="cursor:pointer">Code <span v-if="sortKey === 'code'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('zone_id')" style="cursor:pointer">Zone <span v-if="sortKey === 'zone_id'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('location_id')" style="cursor:pointer">Location <span v-if="sortKey === 'location_id'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="pole in poles" :key="pole.id">
+        <tr v-for="pole in sortedPoles" :key="pole.id">
           <td>{{ pole.id }}</td>
           <td>{{ pole.api_pole_id }}</td>
           <td>{{ pole.code }}</td>
@@ -29,8 +34,10 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import poleService from '@/services/poleService'
+import useSortable from '@/composables/useSortable'
 
 const poles = ref([])
+const { sortKey, sortAsc, sortedItems: sortedPoles, sortBy } = useSortable(poles, 'id')
 
 async function load() {
   const { data } = await poleService.getAll()
