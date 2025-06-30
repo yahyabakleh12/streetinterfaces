@@ -6,6 +6,9 @@ export const useAuthStore = defineStore('auth', {
     roles: JSON.parse(localStorage.getItem('roles') || '[]'),
     permissions: JSON.parse(localStorage.getItem('permissions') || '[]')
   }),
+  getters: {
+    isAdmin: state => state.roles.includes('admin')
+  },
   actions: {
     setToken(token) {
       this.token = token

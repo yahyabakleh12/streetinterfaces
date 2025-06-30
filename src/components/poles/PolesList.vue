@@ -22,8 +22,16 @@
           <td>{{ pole.location_id }}</td>
           <td>
             <router-link :to="`/poles/${pole.id}`" class="btn btn-sm btn-secondary me-1">View</router-link>
-            <router-link :to="`/poles/${pole.id}/edit`" class="btn btn-sm btn-secondary me-1">Edit</router-link>
-            <button class="btn btn-sm btn-danger" @click.prevent="deletePole(pole.id)">Delete</button>
+            <router-link
+              v-if="auth.isAdmin"
+              :to="`/poles/${pole.id}/edit`"
+              class="btn btn-sm btn-secondary me-1"
+            >Edit</router-link>
+            <button
+              v-if="auth.isAdmin"
+              class="btn btn-sm btn-danger"
+              @click.prevent="deletePole(pole.id)"
+            >Delete</button>
           </td>
         </tr>
       </tbody>
@@ -35,9 +43,11 @@
 import { onMounted, ref } from 'vue'
 import poleService from '@/services/poleService'
 import useSortable from '@/composables/useSortable'
+import { useAuthStore } from '@/stores/auth'
 
 const poles = ref([])
 const { sortKey, sortAsc, sortedItems: sortedPoles, sortBy } = useSortable(poles, 'id')
+const auth = useAuthStore()
 
 async function load() {
   const { data } = await poleService.getAll()
