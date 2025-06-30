@@ -87,10 +87,13 @@
           <td>{{ ticket.plate_number }}</td>
           <td>{{ ticket.plate_code }}</td>
           <td>
-            <img v-if="ticket.image_base64"
-                 :src="`data:image/jpeg;base64,${ticket.image_base64}`"
-                 class="img-thumbnail"
-                 style="max-width: 80px" />
+            <img
+              v-if="ticket.image_base64"
+              :src="`data:image/jpeg;base64,${ticket.image_base64}`"
+              class="img-thumbnail"
+              style="max-width: 80px; cursor: pointer"
+              @click="openImage(ticket.image_base64)"
+            />
           </td>
           <td>{{ ticket.camera_id }}</td>
           <td>{{ ticket.spot_number }}</td>
@@ -122,6 +125,11 @@
         </li>
       </ul>
     </nav>
+    <ImageModal
+      v-if="selectedImage"
+      :image="selectedImage"
+      @close="selectedImage = ''"
+    />
   </div>
 </template>
 
@@ -130,6 +138,7 @@ import { onMounted, ref, watch } from 'vue'
 import ticketService from '@/services/ticketService'
 import useSortable from '@/composables/useSortable'
 import { useAuthStore } from '@/stores/auth'
+import ImageModal from '@/components/manualReviews/ImageModal.vue'
 
 const tickets = ref([])
 const { sortKey, sortAsc, sortedItems: sortedTickets, sortBy } = useSortable(tickets, 'id')
@@ -145,6 +154,7 @@ const plateCity = ref('')
 const entryStart = ref('')
 const entryEnd = ref('')
 const total = ref(0)
+const selectedImage = ref('')
 
 async function fetchTickets() {
   const { data } = await ticketService.getAll({
@@ -178,6 +188,10 @@ async function deleteTicket(id) {
     await ticketService.remove(id)
     fetchTickets()
   }
+}
+
+function openImage(imgData) {
+  selectedImage.value = `data:image/jpeg;base64,${imgData}`
 }
 
 watch([page, pageSize], fetchTickets)
