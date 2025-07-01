@@ -3,8 +3,8 @@
   <div class="d-flex">
     <nav v-if="showSidebar" class="sidebar text-light p-3">
       <div class="text-center mb-4">
-        <img src="/vite.svg" alt="Logo" class="img-fluid mb-2" style="height: 40px;">
-        <router-link class="navbar-brand text-light" to="/statistics">Street</router-link>
+        <img src="/src/assets/logo-1-dark.svg" alt="Logo" class="img-fluid mb-2" style="height: 40px;">
+        <router-link class="navbar-brand text-light" to="/statistics">Parkonic On Street</router-link>
       </div>
       <ul class="nav flex-column">
         <li class="nav-item"><router-link class="nav-link text-light" to="/statistics">Statistics</router-link></li>
