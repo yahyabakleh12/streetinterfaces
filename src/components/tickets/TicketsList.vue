@@ -73,7 +73,8 @@
           <th @click="sortBy('id')" style="cursor:pointer">ID <span v-if="sortKey === 'id'">{{ sortAsc ? '▲' : '▼' }}</span></th>
           <th @click="sortBy('plate_number')" style="cursor:pointer">Plate Number <span v-if="sortKey === 'plate_number'">{{ sortAsc ? '▲' : '▼' }}</span></th>
           <th @click="sortBy('plate_code')" style="cursor:pointer">Plate Code <span v-if="sortKey === 'plate_code'">{{ sortAsc ? '▲' : '▼' }}</span></th>
-          <th>Image</th>
+          <th>Entry Image</th>
+          <th>Exit Video</th>
           <th @click="sortBy('camera_id')" style="cursor:pointer">Camera ID <span v-if="sortKey === 'camera_id'">{{ sortAsc ? '▲' : '▼' }}</span></th>
           <th @click="sortBy('spot_number')" style="cursor:pointer">Spot Number <span v-if="sortKey === 'spot_number'">{{ sortAsc ? '▲' : '▼' }}</span></th>
           <th @click="sortBy('entry_time')" style="cursor:pointer">Entry Time <span v-if="sortKey === 'entry_time'">{{ sortAsc ? '▲' : '▼' }}</span></th>
@@ -88,12 +89,19 @@
           <td>{{ ticket.plate_code }}</td>
           <td>
             <img
-              v-if="ticket.image_base64"
-              :src="`data:image/jpeg;base64,${ticket.image_base64}`"
+              v-if="ticket.entry_image"
+              :src="ticket.entry_image.startsWith('data:') ? ticket.entry_image : `data:image/jpeg;base64,${ticket.entry_image}`"
               class="img-thumbnail"
               style="max-width: 80px; cursor: pointer"
-              @click="openImage(ticket.image_base64)"
+              @click="openImage(ticket.entry_image)"
             />
+          </td>
+          <td>
+            <button
+              v-if="ticket.exit_video_path"
+              class="btn btn-link p-0"
+              @click="openVideo(ticket.exit_video_path)"
+            >Play</button>
           </td>
           <td>{{ ticket.camera_id }}</td>
           <td>{{ ticket.spot_number }}</td>
@@ -130,6 +138,11 @@
       :image="selectedImage"
       @close="selectedImage = ''"
     />
+    <VideoModal
+      v-if="selectedVideo"
+      :video="selectedVideo"
+      @close="selectedVideo = ''"
+    />
   </div>
 </template>
 
@@ -139,6 +152,7 @@ import ticketService from '@/services/ticketService'
 import useSortable from '@/composables/useSortable'
 import { useAuthStore } from '@/stores/auth'
 import ImageModal from '@/components/manualReviews/ImageModal.vue'
+import VideoModal from '@/components/manualReviews/VideoModal.vue'
 
 const tickets = ref([])
 const { sortKey, sortAsc, sortedItems: sortedTickets, sortBy } = useSortable(tickets, 'id')
@@ -155,6 +169,7 @@ const entryStart = ref('')
 const entryEnd = ref('')
 const total = ref(0)
 const selectedImage = ref('')
+const selectedVideo = ref('')
 
 async function fetchTickets() {
   const { data } = await ticketService.getAll({
@@ -191,7 +206,15 @@ async function deleteTicket(id) {
 }
 
 function openImage(imgData) {
-  selectedImage.value = `data:image/jpeg;base64,${imgData}`
+  if (imgData.startsWith('data:')) {
+    selectedImage.value = imgData
+  } else {
+    selectedImage.value = `data:image/jpeg;base64,${imgData}`
+  }
+}
+
+function openVideo(path) {
+  selectedVideo.value = path
 }
 
 watch([page, pageSize], fetchTickets)
