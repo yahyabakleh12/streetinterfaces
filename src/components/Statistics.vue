@@ -13,12 +13,41 @@
         </div>
       </div>
     </div>
+    <h2 class="mt-4">Locations</h2>
+    <div class="row">
+      <div
+        v-for="loc in locations"
+        :key="loc.id"
+        class="col-md-3 mb-3"
+      >
+        <div
+          class="card h-100"
+          style="cursor:pointer"
+          @click="goToLocation(loc.id)"
+        >
+          <div class="card-body text-center">
+            <h5 class="card-title">{{ loc.name }}</h5>
+            <p class="card-text">{{ loc.code }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import locationService from '@/services/locationService'
 import Chart from 'chart.js/auto'
+
+const router = useRouter()
+const locations = ref([])
+
+async function loadLocations() {
+  const { data } = await locationService.getAll()
+  locations.value = data
+}
 
 onMounted(() => {
   const barCtx = document.getElementById('barChart')
@@ -50,10 +79,16 @@ onMounted(() => {
     },
     options: {
       responsive: true,
-      maintainAspectRatio: false
+    maintainAspectRatio: false
     }
   })
+
+  loadLocations()
 })
+
+function goToLocation(id) {
+  router.push(`/statistics/location/${id}`)
+}
 </script>
 
 <style scoped>
