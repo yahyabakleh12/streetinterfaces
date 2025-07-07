@@ -4,8 +4,9 @@
       <div class="modal-content bg-transparent border-0">
         <div class="modal-body p-0 position-relative">
           <button type="button" class="btn-close position-absolute top-0 end-0 m-3" @click="close"></button>
-          <div class="d-flex justify-content-center align-items-center" style="overflow:auto; max-height: 90vh;">
-            <img :src="image" :style="imgStyle" />
+          <div class="d-flex justify-content-center align-items-center position-relative" style="overflow:auto; max-height: 90vh;">
+            <LoadingOverlay v-if="loading" />
+            <img :src="image" :style="imgStyle" @load="loading = false" />
           </div>
         </div>
         <div class="modal-footer justify-content-center">
@@ -19,6 +20,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import LoadingOverlay from '../LoadingOverlay.vue'
 
 const props = defineProps({
   image: String
@@ -26,6 +28,7 @@ const props = defineProps({
 const emit = defineEmits(['close'])
 
 const zoom = ref(1)
+const loading = ref(true)
 
 const imgStyle = computed(() => ({
   transform: `scale(${zoom.value})`,
@@ -45,6 +48,7 @@ function zoomOut() {
 
 function close() {
   zoom.value = 1
+  loading.value = true
   emit('close')
 }
 </script>

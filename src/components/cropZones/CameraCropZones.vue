@@ -3,11 +3,12 @@
     <h1>Camera {{ camId }} Crop Zone</h1>
     <div v-if="error" class="alert alert-danger">{{ error }}</div>
     <div
-      v-if="imageUrl"
+      v-if="imageUrl || loading"
       style="position: relative; display: inline-block;"
       @click="recordPoint"
     >
-      <img :src="imageUrl" ref="img" class="img-fluid" @load="onImgLoad" />
+      <LoadingOverlay v-if="loading" />
+      <img v-if="imageUrl" :src="imageUrl" ref="img" class="img-fluid" @load="onImgLoad" />
       <svg
         v-if="imgWidth && imgHeight"
         :width="imgWidth"
@@ -40,6 +41,8 @@
         />
       </svg>
     </div>
+    </div>
+    <div v-if="!imageUrl && !loading && !error">Loading frame...</div>
     <div class="mt-3">
       <button
         v-if="!existingPoints.length"
@@ -60,11 +63,13 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import cameraService from '@/services/cameraService'
 import cropZoneService from '@/services/cropZoneService'
+import LoadingOverlay from '../LoadingOverlay.vue'
 
 const route = useRoute()
 const camId = +route.params.id
 
 const imageUrl = ref('')
+const loading = ref(false)
 const img = ref(null)
 const imgWidth = ref(0)
 const imgHeight = ref(0)
@@ -80,6 +85,7 @@ onMounted(load)
 async function load() {
   try {
     error.value = ''
+    loading.value = true
     const [frameRes, zonesRes] = await Promise.all([
       cameraService.getFrame(camId).catch(() => null),
       cropZoneService.getForCamera(camId)
@@ -91,6 +97,8 @@ async function load() {
     }
   } catch (_) {
     error.value = 'Failed to load crop zone.'
+  } finally {
+    loading.value = false
   }
 }
 
