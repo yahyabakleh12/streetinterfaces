@@ -11,7 +11,9 @@
         </select>
       </div>
     </div>
-    <table class="table table-striped">
+    <div class="position-relative">
+      <LoadingOverlay v-if="loading" />
+    <table class="table table-striped" :class="{ 'opacity-50': loading }">
       <thead>
         <tr>
           <th @click="sortBy('id')" style="cursor:pointer">ID <span v-if="sortKey === 'id'">{{ sortAsc ? '▲' : '▼' }}</span></th>
@@ -56,6 +58,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
     <nav>
       <ul class="pagination">
         <li class="page-item" :class="{ disabled: page === 1 }">
@@ -72,6 +75,7 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
+import LoadingOverlay from '../LoadingOverlay.vue'
 import manualReviewService from '@/services/manualReviewService'
 import useSortable from '@/composables/useSortable'
 import ImageModal from './ImageModal.vue'
@@ -84,8 +88,10 @@ const total = ref(0)
 const status = ref('PENDING')
 const images = ref({})
 const selectedImage = ref('')
+const loading = ref(false)
 
 async function fetchReviews() {
+  loading.value = true
   const { data } = await manualReviewService.getAll({
     status: status.value || undefined,
     page: page.value,
@@ -93,7 +99,8 @@ async function fetchReviews() {
   })
   reviews.value = data.data ?? data.items ?? data
   total.value = data.total ?? reviews.value.length
-  loadImages()
+  await loadImages()
+  loading.value = false
 }
 
 async function loadImages() {

@@ -6,9 +6,10 @@
       <li class="list-group-item">Detected Plate: {{ review.plate_number || review.plate || review.plate_status }}</li>
     </ul>
 
-    <div v-if="plateImage" class="mb-3">
+    <div v-if="plateImage || loadingPlate" class="mb-3 position-relative">
       <h3>Plate Image</h3>
-      <img :src="plateImage" class="img-fluid" />
+      <LoadingOverlay v-if="loadingPlate" />
+      <img v-if="plateImage" :src="plateImage" class="img-fluid" />
     </div>
 
     <div v-if="snapshots.length" class="mb-3">
@@ -18,9 +19,10 @@
       </div>
     </div>
 
-    <div v-if="video" class="mb-3">
+    <div v-if="video || loadingVideo" class="mb-3 position-relative">
       <h3>Video</h3>
-      <video :src="video" controls class="w-100" />
+      <LoadingOverlay v-if="loadingVideo" />
+      <video v-if="video" :src="video" controls class="w-100" />
     </div>
 
     <div class="mb-3">
@@ -48,6 +50,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import manualReviewService from '@/services/manualReviewService'
+import LoadingOverlay from '../LoadingOverlay.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -55,6 +58,8 @@ const router = useRouter()
 const review = ref(null)
 const plateImage = ref('')
 const video = ref('')
+const loadingPlate = ref(false)
+const loadingVideo = ref(false)
 const snapshots = ref([])
 
 const correction = ref({
@@ -69,14 +74,22 @@ onMounted(async () => {
   review.value = data
 
   try {
+    loadingPlate.value = true
     const imgRes = await manualReviewService.getImage(route.params.id)
     plateImage.value = URL.createObjectURL(imgRes.data)
-  } catch (_) {}
+  } catch (_) {
+  } finally {
+    loadingPlate.value = false
+  }
 
   try {
+    loadingVideo.value = true
     const vidRes = await manualReviewService.getVideo(route.params.id)
     video.value = URL.createObjectURL(vidRes.data)
-  } catch (_) {}
+  } catch (_) {
+  } finally {
+    loadingVideo.value = false
+  }
 
   try {
     const { data: snaps } = await manualReviewService.listSnapshots(route.params.id)

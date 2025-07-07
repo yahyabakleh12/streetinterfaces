@@ -5,8 +5,9 @@
       <li class="list-group-item">Spot Number: {{ spot.spot_number }}</li>
       <li class="list-group-item">Camera ID: {{ spot.camera_id }}</li>
     </ul>
-    <div v-if="imageUrl" style="position: relative; display: inline-block;">
-      <img :src="imageUrl" ref="img" class="img-fluid" @load="onImgLoad" />
+    <div v-if="imageUrl || loading" style="position: relative; display: inline-block;">
+      <LoadingOverlay v-if="loading" />
+      <img v-if="imageUrl" :src="imageUrl" ref="img" class="img-fluid" @load="onImgLoad" />
       <svg
         v-if="imgWidth && imgHeight && polygon"
         :width="imgWidth"
@@ -22,6 +23,7 @@
         />
       </svg>
     </div>
+    <div v-if="!imageUrl && !loading">Loading frame...</div>
     <div class="mt-3">
       <router-link :to="`/cameras/${spot.camera_id}/spots`" class="btn btn-secondary">Back to spots</router-link>
     </div>
@@ -33,10 +35,12 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import spotService from '@/services/spotService'
 import cameraService from '@/services/cameraService'
+import LoadingOverlay from '../LoadingOverlay.vue'
 
 const route = useRoute()
 const spot = ref(null)
 const imageUrl = ref('')
+const loading = ref(false)
 const img = ref(null)
 const imgWidth = ref(0)
 const imgHeight = ref(0)
@@ -47,9 +51,13 @@ onMounted(async () => {
   const { data } = await spotService.get(route.params.id)
   spot.value = data
   try {
+    loading.value = true
     const frameRes = await cameraService.getFrame(data.camera_id)
     imageUrl.value = URL.createObjectURL(frameRes.data)
-  } catch (_) {}
+  } catch (_) {
+  } finally {
+    loading.value = false
+  }
 })
 
 function onImgLoad(e) {

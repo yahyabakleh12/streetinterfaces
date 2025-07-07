@@ -2,8 +2,9 @@
   <div>
     <h1>Camera {{ camera ? camera.api_code : camId }} Spots</h1>
     <div v-if="error" class="alert alert-danger">{{ error }}</div>
-    <div v-if="imageUrl" style="position: relative; display: inline-block;" class="mb-3">
-      <img :src="imageUrl" ref="img" class="img-fluid" @load="onImgLoad" />
+    <div v-if="imageUrl || loading" style="position: relative; display: inline-block;" class="mb-3">
+      <LoadingOverlay v-if="loading" />
+      <img v-if="imageUrl" :src="imageUrl" ref="img" class="img-fluid" @load="onImgLoad" />
       <svg
         v-if="imgWidth && imgHeight"
         :width="imgWidth"
@@ -19,6 +20,7 @@
           stroke-width="2" />
       </svg>
     </div>
+    <div v-if="!imageUrl && !loading && !error">Loading frame...</div>
     <button class="btn btn-primary mb-3 me-2" @click="showAdd = true">Add Spot</button>
     <router-link
       :to="`/cameras/${camId}/all-spots`"
@@ -62,6 +64,7 @@ import spotService from '@/services/spotService'
 import cameraService from '@/services/cameraService'
 import { useAuthStore } from '@/stores/auth'
 import AddSpotModal from './AddSpotModal.vue'
+import LoadingOverlay from '../LoadingOverlay.vue'
 
 const route = useRoute()
 const camId = +route.params.id
@@ -72,6 +75,7 @@ const auth = useAuthStore()
 const showAdd = ref(false)
 const camera = ref(null)
 const imageUrl = ref('')
+const loading = ref(false)
 const img = ref(null)
 const imgWidth = ref(0)
 const imgHeight = ref(0)
@@ -86,6 +90,7 @@ function formatPoints(s) {
 async function load() {
   try {
     error.value = ''
+    loading.value = true
     const [cameraRes, frameRes, spotsRes] = await Promise.all([
       cameraService.get(camId).catch(() => null),
       cameraService.getFrame(camId).catch(() => null),
@@ -96,6 +101,8 @@ async function load() {
     spots.value = spotsRes.data
   } catch (_) {
     error.value = 'Failed to load spots.'
+  } finally {
+    loading.value = false
   }
 }
 

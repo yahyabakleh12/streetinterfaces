@@ -21,8 +21,9 @@
       <button type="submit" class="btn btn-primary">Get Clip</button>
     </form>
     <div v-if="error" class="alert alert-danger mt-3">{{ error }}</div>
-    <div v-if="videoUrl" class="mt-3">
-      <video :src="videoUrl" controls class="w-100" />
+    <div v-if="videoUrl || loading" class="mt-3 position-relative">
+      <LoadingOverlay v-if="loading" />
+      <video v-if="videoUrl" :src="videoUrl" controls class="w-100" />
     </div>
   </div>
 </template>
@@ -30,12 +31,14 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import cameraService from '@/services/cameraService'
+import LoadingOverlay from '../LoadingOverlay.vue'
 
 const cameras = ref([])
 const selectedCamera = ref('')
 const start = ref('')
 const end = ref('')
 const videoUrl = ref('')
+const loading = ref(false)
 const error = ref('')
 
 onMounted(async () => {
@@ -58,6 +61,7 @@ async function fetchClip() {
     return
   }
   try {
+    loading.value = true
     const { data } = await cameraService.getClip(selectedCamera.value, {
       start: start.value,
       end: end.value,
@@ -65,6 +69,8 @@ async function fetchClip() {
     videoUrl.value = URL.createObjectURL(data)
   } catch (_) {
     error.value = 'Failed to load clip'
+  } finally {
+    loading.value = false
   }
 }
 </script>

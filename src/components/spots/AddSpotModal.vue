@@ -11,12 +11,19 @@
             {{ error }}
             <button class="btn btn-link" @click="loadFrame">Retry</button>
           </div>
-          <div v-if="!imageUrl && !error">Loading frame...</div>
-          <div v-else-if="imageUrl" style="position: relative; display: inline-block;" @click="recordPoint">
-            <img :src="imageUrl" ref="img" class="img-fluid" @load="onImgLoad" />
-            <svg
-              v-if="imgWidth && imgHeight"
-              :width="imgWidth"
+          <div v-if="!imageUrl && !loading && !error">Loading frame...</div>
+          <div v-if="imageUrl || loading" style="position: relative; display: inline-block;" @click="recordPoint">
+            <LoadingOverlay v-if="loading" />
+            <img
+              v-if="imageUrl"
+              :src="imageUrl"
+              ref="img"
+              class="img-fluid"
+              @load="onImgLoad"
+            />
+          <svg
+            v-if="imgWidth && imgHeight"
+            :width="imgWidth"
               :height="imgHeight"
               class="position-absolute top-0 start-0"
               style="pointer-events: none;"
@@ -49,11 +56,13 @@
 import { ref, onMounted, computed } from 'vue'
 import cameraService from '@/services/cameraService'
 import spotService from '@/services/spotService'
+import LoadingOverlay from '../LoadingOverlay.vue'
 
 const props = defineProps({ cameraId: Number })
 const emit = defineEmits(['close', 'saved'])
 
 const imageUrl = ref('')
+const loading = ref(false)
 const points = ref([])
 const img = ref(null)
 // dimensions used for rendering the SVG overlay
@@ -72,11 +81,14 @@ onMounted(loadFrame)
 async function loadFrame() {
   try {
     error.value = ''
+    loading.value = true
     const { data } = await cameraService.getFrame(props.cameraId)
     imageUrl.value = URL.createObjectURL(data)
   } catch (err) {
     console.error(err)
     error.value = 'Failed to load frame.'
+  } finally {
+    loading.value = false
   }
 }
 

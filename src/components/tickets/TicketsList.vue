@@ -67,7 +67,9 @@
         />
       </div>
     </div>
-    <table class="table table-striped">
+    <div class="position-relative">
+      <LoadingOverlay v-if="loading" />
+    <table class="table table-striped" :class="{ 'opacity-50': loading }">
       <thead>
         <tr>
           <th @click="sortBy('id')" style="cursor:pointer">ID <span v-if="sortKey === 'id'">{{ sortAsc ? '▲' : '▼' }}</span></th>
@@ -115,6 +117,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
     <nav>
       <ul class="pagination">
         <li class="page-item" :class="{ disabled: page === 1 }">
@@ -139,6 +142,7 @@ import ticketService from '@/services/ticketService'
 import useSortable from '@/composables/useSortable'
 import { useAuthStore } from '@/stores/auth'
 import ImageModal from '@/components/manualReviews/ImageModal.vue'
+import LoadingOverlay from '../LoadingOverlay.vue'
 
 const tickets = ref([])
 const { sortKey, sortAsc, sortedItems: sortedTickets, sortBy } = useSortable(tickets, 'id')
@@ -156,8 +160,10 @@ const entryEnd = ref('')
 const total = ref(0)
 const selectedImage = ref('')
 const images = ref({})
+const loading = ref(false)
 
 async function fetchTickets() {
+  loading.value = true
   const { data } = await ticketService.getAll({
     page: page.value,
     page_size: pageSize.value,
@@ -170,11 +176,10 @@ async function fetchTickets() {
     entry_start: entryStart.value || undefined,
     entry_end: entryEnd.value || undefined,
   })
-  // The API may return tickets under `data` or `items`.
-  // Normalize to always store just the array of tickets.
   tickets.value = data.data ?? data.items ?? data
   total.value = data.total ?? tickets.value.length
-  loadImages()
+  await loadImages()
+  loading.value = false
 }
 
 async function loadImages() {
