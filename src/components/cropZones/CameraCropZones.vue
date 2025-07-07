@@ -41,7 +41,6 @@
         />
       </svg>
     </div>
-    </div>
     <div v-if="!imageUrl && !loading && !error">Loading frame...</div>
     <div class="mt-3">
       <button
