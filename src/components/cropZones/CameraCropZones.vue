@@ -2,54 +2,24 @@
   <div>
     <h1>Camera {{ camId }} Crop Zone</h1>
     <div v-if="error" class="alert alert-danger">{{ error }}</div>
-    <div
-      v-if="imageUrl || loading"
-      style="position: relative; display: inline-block;"
-      @click="recordPoint"
-    >
+    <div v-if="imageUrl || loading" style="position: relative; display: inline-block;" @click="recordPoint">
       <LoadingOverlay v-if="loading" />
       <img v-if="imageUrl" :src="imageUrl" ref="img" class="img-fluid" @load="onImgLoad" />
-      <svg
-        v-if="imgWidth && imgHeight"
-        :width="imgWidth"
-        :height="imgHeight"
-        class="position-absolute top-0 start-0"
-        style="pointer-events: none;"
-      >
-        <polygon
-          v-if="existingPoints.length"
-          :points="polygonFor(existingPoints)"
-          fill="rgba(0,255,0,0.3)"
-          stroke="green"
-          stroke-width="2"
-        />
-        <polygon
-          v-if="!existingPoints.length && drawingPoints.length >= 3"
-          :points="polygonFor(drawingPoints)"
-          fill="rgba(0,255,0,0.3)"
-          stroke="green"
-          stroke-width="2"
-        />
-        <circle
-          v-for="(p, i) in drawingPoints"
-          v-if="!existingPoints.length"
-          :key="i"
-          :cx="p.x"
-          :cy="p.y"
-          r="4"
-          fill="green"
-        />
+      <svg v-if="imgWidth && imgHeight" :width="imgWidth" :height="imgHeight" class="position-absolute top-0 start-0"
+        style="pointer-events: none;">
+        <polygon v-if="existingPoints.length" :points="polygonFor(existingPoints)" fill="rgba(0,255,0,0.3)"
+          stroke="green" stroke-width="2" />
+        <polygon v-if="!existingPoints.length && drawingPoints.length >= 3" :points="polygonFor(drawingPoints)"
+          fill="rgba(0,255,0,0.3)" stroke="green" stroke-width="2" />
+        <circle v-for="(p, i) in drawingPoints" v-if="!existingPoints.length" :key="i" :cx="p.x" :cy="p.y" r="4"
+          fill="green" />
       </svg>
     </div>
-    </div>
+    <!-- </div> -->
     <div v-if="!imageUrl && !loading && !error">Loading frame...</div>
     <div class="mt-3">
-      <button
-        v-if="!existingPoints.length"
-        class="btn btn-primary me-2"
-        :disabled="drawingPoints.length < 3 || !!error"
-        @click="save"
-      >
+      <button v-if="!existingPoints.length" class="btn btn-primary me-2" :disabled="drawingPoints.length < 3 || !!error"
+        @click="save">
         Save
       </button>
       <button class="btn btn-secondary me-2" @click="reset" v-if="!existingPoints.length">Reset</button>
