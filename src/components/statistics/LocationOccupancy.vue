@@ -34,11 +34,33 @@ const cameras = ref([])
 const loading = ref(false)
 const selected = ref(null)
 
+function normalizeCamera(cam) {
+  const free =
+    'free' in cam
+      ? cam.free
+      : ('spot_count' in cam && 'occupied_count' in cam
+          ? cam.spot_count - cam.occupied_count
+          : 0)
+  const occupied =
+    'occupied' in cam ? cam.occupied : cam.occupied_count || 0
+
+  let spots = cam.spots
+  if (spots && !Array.isArray(spots)) {
+    spots = Object.entries(spots).map(([num, occ]) => ({
+      spot_number: Number(num),
+      occupied: !!occ,
+    }))
+  }
+
+  return { ...cam, free, occupied, spots }
+}
+
 async function load() {
   loading.value = true
   try {
     const { data } = await occupancyService.getByLocation(locationId)
-    cameras.value = data.cameras || data
+    const cams = data.cameras || data
+    cameras.value = cams.map(normalizeCamera)
   } finally {
     loading.value = false
   }
