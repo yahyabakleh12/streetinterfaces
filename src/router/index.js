@@ -36,6 +36,7 @@ import PermissionsList from '@/components/permissions/PermissionsList.vue'
 import PermissionForm from '@/components/permissions/PermissionForm.vue'
 import PermissionDetail from '@/components/permissions/PermissionDetail.vue'
 import Statistics from '@/components/Statistics.vue'
+import OcrImage from '@/components/OcrImage.vue'
 import LocationOccupancy from '@/components/statistics/LocationOccupancy.vue'
 import Login from '@/components/Login.vue'
 import { useAuthStore } from '@/stores/auth'
@@ -54,6 +55,7 @@ const routes = [
   { path: '/cameras/:id/crop-zones', component: CameraCropZones },
   { path: '/spots/:id', component: SpotDetail, props: true },
   { path: '/camera-clip',      component: CameraClip },
+  { path: '/img-ocr',      component: OcrImage },
   { path: '/locations',          component: LocationsList },
   { path: '/locations/create',   component: LocationForm, props: { isEdit: false } },
   { path: '/locations/:id/edit', component: LocationForm, props: route => ({ isEdit: true, id: +route.params.id }) },
