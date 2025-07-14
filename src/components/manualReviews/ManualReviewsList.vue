@@ -64,6 +64,14 @@
         <li class="page-item" :class="{ disabled: page === 1 }">
           <button class="page-link" @click="prevPage">Previous</button>
         </li>
+        <li
+          v-for="p in pages"
+          :key="p"
+          class="page-item"
+          :class="{ active: page === p }"
+        >
+          <button class="page-link" @click="setPage(p)">{{ p }}</button>
+        </li>
         <li class="page-item" :class="{ disabled: page * pageSize >= total }">
           <button class="page-link" @click="nextPage">Next</button>
         </li>
@@ -74,7 +82,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import LoadingOverlay from '../LoadingOverlay.vue'
 import manualReviewService from '@/services/manualReviewService'
 import useSortable from '@/composables/useSortable'
@@ -89,6 +97,8 @@ const status = ref('PENDING')
 const images = ref({})
 const selectedImage = ref('')
 const loading = ref(false)
+const pageCount = computed(() => Math.ceil(total.value / pageSize.value))
+const pages = computed(() => Array.from({ length: pageCount.value }, (_, i) => i + 1))
 
 async function fetchReviews() {
   loading.value = true
@@ -132,6 +142,10 @@ function nextPage() {
 
 function prevPage() {
   if (page.value > 1) page.value--
+}
+
+function setPage(p) {
+  if (p >= 1 && p <= pageCount.value) page.value = p
 }
 
 watch([page, pageSize], fetchReviews)
