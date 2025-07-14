@@ -150,6 +150,7 @@
 
 <script setup>
 import { onMounted, ref, watch, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import ticketService from '@/services/ticketService'
 import useSortable from '@/composables/useSortable'
 import { useAuthStore } from '@/stores/auth'
@@ -159,16 +160,19 @@ import LoadingOverlay from '../LoadingOverlay.vue'
 const tickets = ref([])
 const { sortKey, sortAsc, sortedItems: sortedTickets, sortBy } = useSortable(tickets, 'id')
 const auth = useAuthStore()
-const page = ref(1)
-const pageSize = ref(50)
-const search = ref('')
-const cameraId = ref(null)
-const spotNumber = ref(null)
-const plateNumber = ref('')
-const plateCode = ref('')
-const plateCity = ref('')
-const entryStart = ref('')
-const entryEnd = ref('')
+const router = useRouter()
+const route = useRoute()
+
+const page = ref(parseInt(route.query.page) || 1)
+const pageSize = ref(parseInt(route.query.page_size) || 50)
+const search = ref(route.query.search || '')
+const cameraId = ref(route.query.camera_id ? Number(route.query.camera_id) : null)
+const spotNumber = ref(route.query.spot_number ? Number(route.query.spot_number) : null)
+const plateNumber = ref(route.query.plate_number || '')
+const plateCode = ref(route.query.plate_code || '')
+const plateCity = ref(route.query.plate_city || '')
+const entryStart = ref(route.query.entry_start || '')
+const entryEnd = ref(route.query.entry_end || '')
 const total = ref(0)
 const selectedImage = ref('')
 const images = ref({})
@@ -181,6 +185,7 @@ const pages = computed(() => {
 })
 
 async function fetchTickets() {
+  updateQuery()
   loading.value = true
   const { data } = await ticketService.getAll({
     page: page.value,
@@ -248,8 +253,27 @@ function calcDuration(entry, exit) {
   return [h, m, s].map(v => v.toString().padStart(2, '0')).join(':')
 }
 
+function updateQuery() {
+  router.replace({
+    query: {
+      page: page.value !== 1 ? page.value : undefined,
+      page_size: pageSize.value !== 50 ? pageSize.value : undefined,
+      search: search.value || undefined,
+      camera_id: cameraId.value || undefined,
+      spot_number: spotNumber.value || undefined,
+      plate_number: plateNumber.value || undefined,
+      plate_code: plateCode.value || undefined,
+      plate_city: plateCity.value || undefined,
+      entry_start: entryStart.value || undefined,
+      entry_end: entryEnd.value || undefined,
+    },
+  })
+}
 
-watch([page, pageSize], fetchTickets)
+
+watch([page, pageSize], () => {
+  fetchTickets()
+})
 watch(
   [search, cameraId, spotNumber, plateNumber, plateCode, plateCity, entryStart, entryEnd],
   () => {
