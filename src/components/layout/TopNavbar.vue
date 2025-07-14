@@ -1,11 +1,12 @@
 <template>
   <nav class="navbar navbar-light bg-white border-bottom px-3 fixed-top" style="height: 60px; z-index:1000;">
     <div class="d-flex align-items-center w-100">
-      <button class="btn btn-link text-dark me-3" @click="$emit('toggle')">
+     
+      <img src="/src/assets/parkonic.png" style="height: 40px;">
+      <span class="navbar-brand mb-0 h5">On Street Parking</span>
+       <button class="btn btn-link text-dark me-3" @click="$emit('toggle')">
         <i class="bi bi-list" style="font-size: 1.5rem;"></i>
       </button>
-      <img src="/src/assets/logo-1-dark.svg" alt="Logo" style="height:40px;" class="me-2">
-      <span class="navbar-brand mb-0 h5">Parkonic On Street</span>
       <div class="ms-auto d-flex align-items-center">
         <span class="me-4">{{ breadcrumb }}</span>
         <button class="btn position-relative me-3">
