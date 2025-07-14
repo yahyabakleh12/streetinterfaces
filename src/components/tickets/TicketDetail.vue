@@ -9,8 +9,15 @@
     </ul>
     <div v-if="imageUrl || loadingImage" class="position-relative mb-3">
       <LoadingOverlay v-if="loadingImage" />
-      <img v-if="imageUrl" :src="imageUrl" class="img-fluid" />
+      <img
+        v-if="imageUrl"
+        :src="imageUrl"
+        class="img-thumbnail"
+        style="max-width: 150px; cursor: pointer"
+        @click="openImage(imageUrl)"
+      />
     </div>
+    <ImageModal v-if="selectedImage" :image="selectedImage" @close="selectedImage = ''" />
     <div v-if="videoUrl || loadingVideo" class="position-relative mb-3">
       <LoadingOverlay v-if="loadingVideo" />
       <video v-if="videoUrl" :src="videoUrl" controls autoplay class="w-100" />
@@ -24,6 +31,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import ticketService from '@/services/ticketService'
 import LoadingOverlay from '../LoadingOverlay.vue'
+import ImageModal from '@/components/manualReviews/ImageModal.vue'
 
 const route = useRoute()
 const ticket = ref(null)
@@ -31,6 +39,7 @@ const imageUrl = ref('')
 const videoUrl = ref('')
 const loadingImage = ref(false)
 const loadingVideo = ref(false)
+const selectedImage = ref('')
 
 onMounted(async () => {
   const { data } = await ticketService.get(route.params.id)
@@ -53,4 +62,8 @@ onMounted(async () => {
     loadingVideo.value = false
   }
 })
+
+function openImage(img) {
+  selectedImage.value = img
+}
 </script>
