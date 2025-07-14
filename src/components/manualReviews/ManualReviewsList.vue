@@ -98,7 +98,11 @@ const images = ref({})
 const selectedImage = ref('')
 const loading = ref(false)
 const pageCount = computed(() => Math.ceil(total.value / pageSize.value))
-const pages = computed(() => Array.from({ length: pageCount.value }, (_, i) => i + 1))
+const pages = computed(() => {
+  const start = page.value
+  const end = Math.min(pageCount.value, start + 3)
+  return Array.from({ length: end - start + 1 }, (_, i) => start + i)
+})
 
 async function fetchReviews() {
   loading.value = true
