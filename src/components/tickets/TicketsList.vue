@@ -75,11 +75,13 @@
           <th @click="sortBy('id')" style="cursor:pointer">ID <span v-if="sortKey === 'id'">{{ sortAsc ? '▲' : '▼' }}</span></th>
           <th @click="sortBy('plate_number')" style="cursor:pointer">Plate Number <span v-if="sortKey === 'plate_number'">{{ sortAsc ? '▲' : '▼' }}</span></th>
           <th @click="sortBy('plate_code')" style="cursor:pointer">Plate Code <span v-if="sortKey === 'plate_code'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th @click="sortBy('plate_city')" style="cursor:pointer">Plate City <span v-if="sortKey === 'plate_city'">{{ sortAsc ? '▲' : '▼' }}</span></th>
           <th>Entry Image</th>
           <th @click="sortBy('camera_id')" style="cursor:pointer">Camera ID <span v-if="sortKey === 'camera_id'">{{ sortAsc ? '▲' : '▼' }}</span></th>
           <th @click="sortBy('spot_number')" style="cursor:pointer">Spot Number <span v-if="sortKey === 'spot_number'">{{ sortAsc ? '▲' : '▼' }}</span></th>
           <th @click="sortBy('entry_time')" style="cursor:pointer">Entry Time <span v-if="sortKey === 'entry_time'">{{ sortAsc ? '▲' : '▼' }}</span></th>
           <th @click="sortBy('exit_time')" style="cursor:pointer">Exit Time <span v-if="sortKey === 'exit_time'">{{ sortAsc ? '▲' : '▼' }}</span></th>
+          <th>Duration</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -88,6 +90,7 @@
           <td>{{ ticket.id }}</td>
           <td>{{ ticket.plate_number }}</td>
           <td>{{ ticket.plate_code }}</td>
+          <td>{{ ticket.plate_city }}</td>
           <td>
             <img
               v-if="images[ticket.id]"
@@ -101,6 +104,7 @@
           <td>{{ ticket.spot_number }}</td>
           <td>{{ ticket.entry_time }}</td>
           <td>{{ ticket.exit_time }}</td>
+          <td>{{ calcDuration(ticket.entry_time, ticket.exit_time) }}</td>
           <td>
             <router-link :to="`/tickets/${ticket.id}`" class="btn btn-sm btn-secondary me-1">View</router-link>
             <router-link
@@ -211,6 +215,19 @@ async function deleteTicket(id) {
 
 function openImage(imgUrl) {
   selectedImage.value = imgUrl
+}
+
+function calcDuration(entry, exit) {
+  if (!entry || !exit) return ''
+  const start = new Date(entry)
+  const end = new Date(exit)
+  if (isNaN(start) || isNaN(end)) return ''
+  let seconds = Math.floor((end - start) / 1000)
+  if (seconds < 0) seconds = 0
+  const h = Math.floor(seconds / 3600)
+  const m = Math.floor((seconds % 3600) / 60)
+  const s = seconds % 60
+  return [h, m, s].map(v => v.toString().padStart(2, '0')).join(':')
 }
 
 
