@@ -7,8 +7,12 @@
       <li class="list-group-item">Entry Time: {{ ticket.entry_time }}</li>
       <li class="list-group-item">Exit Time: {{ ticket.exit_time }}</li>
     </ul>
-    <div v-if="videoUrl || loading" class="position-relative mb-3">
-      <LoadingOverlay v-if="loading" />
+    <div v-if="imageUrl || loadingImage" class="position-relative mb-3">
+      <LoadingOverlay v-if="loadingImage" />
+      <img v-if="imageUrl" :src="imageUrl" class="img-fluid" />
+    </div>
+    <div v-if="videoUrl || loadingVideo" class="position-relative mb-3">
+      <LoadingOverlay v-if="loadingVideo" />
       <video v-if="videoUrl" :src="videoUrl" controls autoplay class="w-100" />
     </div>
     <router-link to="/tickets" class="btn btn-secondary">Back to list</router-link>
@@ -23,19 +27,30 @@ import LoadingOverlay from '../LoadingOverlay.vue'
 
 const route = useRoute()
 const ticket = ref(null)
+const imageUrl = ref('')
 const videoUrl = ref('')
-const loading = ref(false)
+const loadingImage = ref(false)
+const loadingVideo = ref(false)
 
 onMounted(async () => {
   const { data } = await ticketService.get(route.params.id)
   ticket.value = data
   try {
-    loading.value = true
+    loadingImage.value = true
+    const imgRes = await ticketService.getImage(route.params.id)
+    imageUrl.value = URL.createObjectURL(imgRes.data)
+  } catch (_) {
+  } finally {
+    loadingImage.value = false
+  }
+
+  try {
+    loadingVideo.value = true
     const vidRes = await ticketService.getVideo(route.params.id)
     videoUrl.value = URL.createObjectURL(vidRes.data)
   } catch (_) {
   } finally {
-    loading.value = false
+    loadingVideo.value = false
   }
 })
 </script>
