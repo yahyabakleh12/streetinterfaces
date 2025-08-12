@@ -17,11 +17,17 @@
         @click="openImage(imageUrl)"
       />
     </div>
-    <ImageModal v-if="selectedImage" :image="selectedImage" @close="selectedImage = ''" />
-    <div v-if="videoUrl || loadingVideo" class="position-relative mb-3">
-      <LoadingOverlay v-if="loadingVideo" />
-      <video v-if="videoUrl" :src="videoUrl" controls autoplay class="w-100" />
+    <div v-if="exitImageUrl || loadingExitImage" class="position-relative mb-3">
+      <LoadingOverlay v-if="loadingExitImage" />
+      <img
+        v-if="exitImageUrl"
+        :src="exitImageUrl"
+        class="img-thumbnail"
+        style="max-width: 150px; cursor: pointer"
+        @click="openImage(exitImageUrl)"
+      />
     </div>
+    <ImageModal v-if="selectedImage" :image="selectedImage" @close="selectedImage = ''" />
     <router-link to="/tickets" class="btn btn-secondary">Back to list</router-link>
   </div>
 </template>
@@ -36,9 +42,9 @@ import ImageModal from '@/components/manualReviews/ImageModal.vue'
 const route = useRoute()
 const ticket = ref(null)
 const imageUrl = ref('')
-const videoUrl = ref('')
+const exitImageUrl = ref('')
 const loadingImage = ref(false)
-const loadingVideo = ref(false)
+const loadingExitImage = ref(false)
 const selectedImage = ref('')
 
 onMounted(async () => {
@@ -54,12 +60,12 @@ onMounted(async () => {
   }
 
   try {
-    loadingVideo.value = true
-    const vidRes = await ticketService.getVideo(route.params.id)
-    videoUrl.value = URL.createObjectURL(vidRes.data)
+    loadingExitImage.value = true
+    const exitImgRes = await ticketService.getExitImage(route.params.id)
+    exitImageUrl.value = URL.createObjectURL(exitImgRes.data)
   } catch (_) {
   } finally {
-    loadingVideo.value = false
+    loadingExitImage.value = false
   }
 })
 
