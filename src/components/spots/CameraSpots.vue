@@ -21,7 +21,10 @@
       </svg>
     </div>
     <div v-if="!imageUrl && !loading && !error">Loading frame...</div>
-    <button class="btn btn-primary mb-3 me-2" @click="showAdd = true">Add Spot</button>
+    <router-link
+      :to="`/cameras/${camId}/spots/add`"
+      class="btn btn-primary mb-3 me-2"
+    >Add Spots</router-link>
     <router-link
       :to="`/cameras/${camId}/all-spots`"
       class="btn btn-secondary mb-3"
@@ -52,7 +55,6 @@
       </tbody>
     </table>
     <router-link to="/cameras" class="btn btn-secondary mt-3">Back to Cameras</router-link>
-    <AddSpotModal v-if="showAdd" :camera-id="camId" @close="showAdd = false" @saved="load"/>
   </div>
 </template>
 
@@ -63,7 +65,6 @@ import { useRoute } from 'vue-router'
 import spotService from '@/services/spotService'
 import cameraService from '@/services/cameraService'
 import { useAuthStore } from '@/stores/auth'
-import AddSpotModal from './AddSpotModal.vue'
 import LoadingOverlay from '../LoadingOverlay.vue'
 
 const route = useRoute()
@@ -72,7 +73,6 @@ const camId = +route.params.id
 const spots = ref([])
 const { sortKey, sortAsc, sortedItems: sortedSpots, sortBy } = useSortable(spots, 'id')
 const auth = useAuthStore()
-const showAdd = ref(false)
 const camera = ref(null)
 const imageUrl = ref('')
 const loading = ref(false)
