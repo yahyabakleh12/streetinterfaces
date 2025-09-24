@@ -4,6 +4,7 @@ import CameraForm   from '@/components/cameras/CameraForm.vue'
 import CameraDetail from '@/components/cameras/CameraDetail.vue'
 import CameraClip from '@/components/cameras/CameraClip.vue'
 import CameraSpots from '@/components/spots/CameraSpots.vue'
+import AddSpotsFullScreen from '@/components/spots/AddSpotsFullScreen.vue'
 import CameraAllSpots from '@/components/spots/CameraAllSpots.vue'
 import CameraCropZones from '@/components/cropZones/CameraCropZones.vue'
 import SpotDetail from '@/components/spots/SpotDetail.vue'
@@ -51,6 +52,7 @@ const routes = [
   { path: '/cameras/:id/edit', component: CameraForm,   props: route => ({ isEdit: true, id: +route.params.id }) },
   { path: '/cameras/:id',      component: CameraDetail, props: true },
   { path: '/cameras/:id/spots', component: CameraSpots },
+  { path: '/cameras/:id/spots/add', component: AddSpotsFullScreen },
   { path: '/cameras/:id/all-spots', component: CameraAllSpots },
   { path: '/cameras/:id/crop-zones', component: CameraCropZones },
   { path: '/spots/:id', component: SpotDetail, props: true },
