@@ -12,6 +12,12 @@
         class="position-absolute top-0 start-0"
         style="pointer-events: none;">
         <polygon
+          v-if="cropZonePoints.length"
+          :points="polygonForCropZone()"
+          fill="rgba(0, 255, 0, 0.2)"
+          stroke="green"
+          stroke-width="2" />
+        <polygon
           v-for="spot in spots"
           :key="spot.id"
           :points="polygonFor(spot)"
@@ -64,6 +70,7 @@ import useSortable from '@/composables/useSortable'
 import { useRoute } from 'vue-router'
 import spotService from '@/services/spotService'
 import cameraService from '@/services/cameraService'
+import cropZoneService from '@/services/cropZoneService'
 import { useAuthStore } from '@/stores/auth'
 import LoadingOverlay from '../LoadingOverlay.vue'
 
@@ -82,6 +89,7 @@ const imgHeight = ref(0)
 const naturalWidth = ref(0)
 const naturalHeight = ref(0)
 const error = ref('')
+const cropZonePoints = ref([])
 
 function formatPoints(s) {
   return `${s.p1_x},${s.p1_y} ${s.p2_x},${s.p2_y} ${s.p3_x},${s.p3_y} ${s.p4_x},${s.p4_y}`
@@ -91,16 +99,21 @@ async function load() {
   try {
     error.value = ''
     loading.value = true
-    const [cameraRes, frameRes, spotsRes] = await Promise.all([
+    cropZonePoints.value = []
+    const [cameraRes, frameRes, spotsRes, cropZoneRes] = await Promise.all([
       cameraService.get(camId).catch(() => null),
       cameraService.getFrame(camId).catch(() => null),
-      spotService.getForCamera(camId)
+      spotService.getForCamera(camId),
+      cropZoneService.getForCamera(camId).catch(() => ({ data: [] }))
     ])
     if (cameraRes) camera.value = cameraRes.data
     if (frameRes) imageUrl.value = URL.createObjectURL(frameRes.data)
     spots.value = spotsRes.data
+    const zones = cropZoneRes?.data || []
+    cropZonePoints.value = Array.isArray(zones) && zones.length ? zones[0].points || [] : []
   } catch (_) {
     error.value = 'Failed to load spots.'
+    cropZonePoints.value = []
   } finally {
     loading.value = false
   }
@@ -132,6 +145,13 @@ function polygonFor(spot) {
     { x: spot.p4_x, y: spot.p4_y }
   ]
   return pts.map(p => `${p.x * ratioX},${p.y * ratioY}`).join(' ')
+}
+
+function polygonForCropZone() {
+  if (!imgWidth.value || !cropZonePoints.value.length) return ''
+  const ratioX = imgWidth.value / naturalWidth.value
+  const ratioY = imgHeight.value / naturalHeight.value
+  return cropZonePoints.value.map(p => `${p.x * ratioX},${p.y * ratioY}`).join(' ')
 }
 
 onMounted(load)

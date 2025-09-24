@@ -12,6 +12,12 @@
         class="position-absolute top-0 start-0"
         style="pointer-events: none;">
         <polygon
+          v-if="cropZonePoints.length"
+          :points="polygonForCropZone()"
+          fill="rgba(0, 255, 0, 0.2)"
+          stroke="green"
+          stroke-width="2" />
+        <polygon
           v-for="spot in spots"
           :key="spot.id"
           :points="polygonFor(spot)"
@@ -32,6 +38,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import cameraService from '@/services/cameraService'
 import spotService from '@/services/spotService'
+import cropZoneService from '@/services/cropZoneService'
 import LoadingOverlay from '../LoadingOverlay.vue'
 
 const route = useRoute()
@@ -46,20 +53,26 @@ const imgHeight = ref(0)
 const naturalWidth = ref(0)
 const naturalHeight = ref(0)
 const error = ref('')
+const cropZonePoints = ref([])
 
 onMounted(async () => {
   try {
     loading.value = true
-    const [frameRes, spotsRes] = await Promise.all([
+    cropZonePoints.value = []
+    const [frameRes, spotsRes, cropZoneRes] = await Promise.all([
       cameraService.getFrame(camId).catch(() => null),
-      spotService.getForCamera(camId)
+      spotService.getForCamera(camId),
+      cropZoneService.getForCamera(camId).catch(() => ({ data: [] }))
     ])
     if (frameRes) {
       imageUrl.value = URL.createObjectURL(frameRes.data)
     }
     spots.value = spotsRes.data
+    const zones = cropZoneRes?.data || []
+    cropZonePoints.value = Array.isArray(zones) && zones.length ? zones[0].points || [] : []
   } catch (_) {
     error.value = 'Failed to load spots.'
+    cropZonePoints.value = []
   } finally {
     loading.value = false
   }
@@ -84,5 +97,12 @@ function polygonFor(spot) {
     { x: spot.p4_x, y: spot.p4_y }
   ]
   return pts.map(p => `${p.x * ratioX},${p.y * ratioY}`).join(' ')
+}
+
+function polygonForCropZone() {
+  if (!imgWidth.value || !cropZonePoints.value.length) return ''
+  const ratioX = imgWidth.value / naturalWidth.value
+  const ratioY = imgHeight.value / naturalHeight.value
+  return cropZonePoints.value.map(p => `${p.x * ratioX},${p.y * ratioY}`).join(' ')
 }
 </script>
