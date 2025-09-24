@@ -9,12 +9,19 @@
       <LoadingOverlay v-if="loading" />
       <img v-if="imageUrl" :src="imageUrl" ref="img" class="img-fluid" @load="onImgLoad" />
       <svg
-        v-if="imgWidth && imgHeight && polygon"
+        v-if="imgWidth && imgHeight && (polygon || cropPolygon)"
         :width="imgWidth"
         :height="imgHeight"
         class="position-absolute top-0 start-0"
         style="pointer-events: none;"
       >
+        <polygon
+          v-if="cropPolygon"
+          :points="cropPolygon"
+          fill="rgba(0, 255, 0, 0.2)"
+          stroke="green"
+          stroke-width="2"
+        />
         <polygon
           :points="polygon"
           fill="rgba(255,0,0,0.3)"
@@ -35,6 +42,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import spotService from '@/services/spotService'
 import cameraService from '@/services/cameraService'
+import cropZoneService from '@/services/cropZoneService'
 import LoadingOverlay from '../LoadingOverlay.vue'
 
 const route = useRoute()
@@ -46,15 +54,24 @@ const imgWidth = ref(0)
 const imgHeight = ref(0)
 const naturalWidth = ref(0)
 const naturalHeight = ref(0)
+const cropZonePoints = ref([])
 
 onMounted(async () => {
   const { data } = await spotService.get(route.params.id)
   spot.value = data
   try {
     loading.value = true
-    const frameRes = await cameraService.getFrame(data.camera_id)
-    imageUrl.value = URL.createObjectURL(frameRes.data)
+    const [frameRes, cropZoneRes] = await Promise.all([
+      cameraService.getFrame(data.camera_id).catch(() => null),
+      cropZoneService.getForCamera(data.camera_id).catch(() => ({ data: [] }))
+    ])
+    if (frameRes) {
+      imageUrl.value = URL.createObjectURL(frameRes.data)
+    }
+    const zones = cropZoneRes?.data || []
+    cropZonePoints.value = Array.isArray(zones) && zones.length ? zones[0].points || [] : []
   } catch (_) {
+    cropZonePoints.value = []
   } finally {
     loading.value = false
   }
@@ -79,5 +96,12 @@ const polygon = computed(() => {
     { x: spot.value.p4_x, y: spot.value.p4_y }
   ]
   return pts.map(p => `${p.x * ratioX},${p.y * ratioY}`).join(' ')
+})
+
+const cropPolygon = computed(() => {
+  if (!cropZonePoints.value.length || !imgWidth.value) return ''
+  const ratioX = imgWidth.value / naturalWidth.value
+  const ratioY = imgHeight.value / naturalHeight.value
+  return cropZonePoints.value.map(p => `${p.x * ratioX},${p.y * ratioY}`).join(' ')
 })
 </script>

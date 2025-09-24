@@ -48,6 +48,13 @@
             class="overlay"
           >
             <polygon
+              v-if="cropZonePoints.length"
+              :points="polygonForCropZone()"
+              fill="rgba(0, 255, 0, 0.2)"
+              stroke="green"
+              stroke-width="2"
+            />
+            <polygon
               v-for="spot in existingSpots"
               :key="spot.id"
               :points="polygonForExisting(spot)"
@@ -176,6 +183,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import cameraService from '@/services/cameraService'
 import spotService from '@/services/spotService'
+import cropZoneService from '@/services/cropZoneService'
 import LoadingOverlay from '../LoadingOverlay.vue'
 
 const route = useRoute()
@@ -198,6 +206,7 @@ const currentPoints = ref([])
 const currentSpotNumber = ref(null)
 const pendingSpots = ref([])
 const existingSpots = ref([])
+const cropZonePoints = ref([])
 
 const cameraTitle = computed(() => {
   if (camera.value?.api_code) return camera.value.api_code
@@ -216,10 +225,11 @@ async function loadData() {
   try {
     error.value = ''
     loading.value = true
-    const [cameraRes, frameRes, spotsRes] = await Promise.allSettled([
+    const [cameraRes, frameRes, spotsRes, cropZoneRes] = await Promise.allSettled([
       cameraService.get(camId),
       cameraService.getFrame(camId),
-      spotService.getForCamera(camId)
+      spotService.getForCamera(camId),
+      cropZoneService.getForCamera(camId)
     ])
 
     if (cameraRes.status === 'fulfilled') {
@@ -239,12 +249,20 @@ async function loadData() {
       existingSpots.value = []
     }
 
-    if (frameRes.status === 'rejected' || spotsRes.status === 'rejected') {
-      error.value = 'Failed to load the latest camera frame or spots. Some information may be missing.'
+    if (cropZoneRes.status === 'fulfilled') {
+      const zones = cropZoneRes.value.data || []
+      cropZonePoints.value = Array.isArray(zones) && zones.length ? zones[0].points || [] : []
+    } else {
+      cropZonePoints.value = []
+    }
+
+    if (frameRes.status === 'rejected' || spotsRes.status === 'rejected' || cropZoneRes.status === 'rejected') {
+      error.value = 'Failed to load the latest camera frame, spots, or crop zone. Some information may be missing.'
     }
   } catch (err) {
     console.error(err)
     error.value = 'Failed to load camera information.'
+    cropZonePoints.value = []
   } finally {
     loading.value = false
   }
@@ -321,6 +339,13 @@ function polygonForPending(pending) {
   const ratioX = imgWidth.value / naturalWidth.value
   const ratioY = imgHeight.value / naturalHeight.value
   return pending.points.map(point => `${point.x * ratioX},${point.y * ratioY}`).join(' ')
+}
+
+function polygonForCropZone() {
+  if (!imgWidth.value || !naturalWidth.value || !cropZonePoints.value.length) return ''
+  const ratioX = imgWidth.value / naturalWidth.value
+  const ratioY = imgHeight.value / naturalHeight.value
+  return cropZonePoints.value.map(point => `${point.x * ratioX},${point.y * ratioY}`).join(' ')
 }
 
 function centroid(points) {
